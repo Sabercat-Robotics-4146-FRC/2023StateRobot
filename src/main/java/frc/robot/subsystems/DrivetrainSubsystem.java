@@ -16,10 +16,12 @@ import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -32,12 +34,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public WPI_Pigeon2 gyroscope;
 
     public boolean driveFlag = true;
-    public boolean fieldOriented = false;
+    public boolean fieldOriented = true;
+    public boolean rotationFlag = false;
+    public boolean drivingFlag = false;
 
     public PIDController driftCorrectionStat;
     public PIDController driftCorrectionRot;
 
-    public double lastPigeonAngle;
+    public double lastPigeonAngle = 0;
 
     public DrivetrainSubsystem() {
         // init and config gyroscope
@@ -47,10 +51,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         // init swerve modules
         swerveModules = new SwerveModule[] {
-            new SwerveModule(0, DriveConstants.FrontLeft.constants),
-            new SwerveModule(1, DriveConstants.FrontRight.constants),
-            new SwerveModule(2, DriveConstants.BackLeft.constants),
-            new SwerveModule(3, DriveConstants.BackRight.constants)
+            new SwerveModule("FrontLeft", 0, DriveConstants.FrontLeft.constants),
+            new SwerveModule("FrontRight", 1, DriveConstants.FrontRight.constants),
+            new SwerveModule("BackLeft", 2, DriveConstants.BackLeft.constants),
+            new SwerveModule("BackRight", 3, DriveConstants.BackRight.constants)
         };
 
         Timer.delay(1.0);
@@ -59,7 +63,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         swerveOdometry = new SwerveDriveOdometry(DriveConstants.swerveKinematics, gyroscope.getRotation2d(), getModulePositions());
 
         // set drift correction PID
-        driftCorrectionStat = new PIDController(0.04, 0.0, 0);
+        driftCorrectionStat = new PIDController(0.01, 0.0005, 0);
         driftCorrectionStat.enableContinuousInput(-180, 180);
         driftCorrectionRot = new PIDController(0.2, 0.0, 0);
         driftCorrectionRot.enableContinuousInput(-180, 180);
@@ -84,24 +88,22 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // sets drive signal with the translational and rotational velocities.
     public void drive(Translation2d translationalVelocity, double rotationalVelocity, boolean fieldOriented) {
         driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, fieldOriented);
+
+        rotationFlag = Math.abs(rotationalVelocity) > 0.1;
+        drivingFlag = Math.abs(translationalVelocity.getNorm()) > 0.01;
     } 
     
     // drive correction code
     public SwerveModuleState[] driftCorrection(SwerveModuleState[] moduleStates) {
         ChassisSpeeds s = DriveConstants.swerveKinematics.toChassisSpeeds(moduleStates);
-        if(Math.abs(s.vxMetersPerSecond) + Math.abs(s.vyMetersPerSecond) >= 0.1) {
-            if (s.omegaRadiansPerSecond == 0) {
-                s.omegaRadiansPerSecond = 
-                    driftCorrectionStat.calculate(gyroscope.getAngle() % 360, lastPigeonAngle % 360) 
-                    * DriveConstants.maxAngularVelocity;
-            }
-            if(Math.abs(s.omegaRadiansPerSecond) >= 0.01) {
-                double expectedChange = s.omegaRadiansPerSecond * 0.02 * 180/Math.PI;
-                s.omegaRadiansPerSecond -= 
-                    driftCorrectionRot.calculate(gyroscope.getAngle() % 360, (lastPigeonAngle-expectedChange) % 360);
-            }
+
+        if(!rotationFlag && drivingFlag) {
+            s.omegaRadiansPerSecond = 
+                -driftCorrectionStat.calculate(gyroscope.getAngle() % 360, lastPigeonAngle % 360)
+                * DriveConstants.maxAngularVelocity;
+        } else {
+            lastPigeonAngle = gyroscope.getAngle();
         }
-        lastPigeonAngle = gyroscope.getAngle();
 
         return DriveConstants.swerveKinematics.toSwerveModuleStates(s);  
     }
@@ -136,23 +138,26 @@ public class DrivetrainSubsystem extends SubsystemBase {
         desiredStates = driftCorrection(desiredStates);
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.maxSpeed);
         for(SwerveModule mod : swerveModules){
+            SmartDashboard.putNumber(mod.moduleName, mod.getState().angle.getDegrees());
             mod.setDesiredState(desiredStates[mod.moduleNumber], false);
         }
     }
 
     private void update(HolonomicDriveSignal driveSignal) {
         if (driveFlag) {
-            ChassisSpeeds speeds = driveSignal.isFieldOriented() ? 
-                ChassisSpeeds.fromFieldRelativeSpeeds(
-                    driveSignal.getTranslation().getX(), 
-                    driveSignal.getTranslation().getY(), 
-                    driveSignal.getRotation(),
-                    gyroscope.getRotation2d()) : 
+            Rotation2d rotOffset =
+                (driveSignal.isFieldOriented())
+                    ? Rotation2d.fromDegrees(gyroscope.getAngle())
+                    : Rotation2d.fromDegrees(0);
+
+            Translation2d translation = driveSignal.getTranslation().rotateBy(rotOffset);
+
+            ChassisSpeeds speeds = 
                 new ChassisSpeeds(
-                    driveSignal.getTranslation().getX(), 
-                    driveSignal.getTranslation().getY(), 
+                    translation.getX(), 
+                    translation.getY(), 
                     driveSignal.getRotation());
-      
+
           SwerveModuleState[] moduleStates = DriveConstants.swerveKinematics.toSwerveModuleStates(speeds);
           updateModules(moduleStates);
         }
@@ -166,5 +171,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public void toggleFieldOriented() {
         fieldOriented = !fieldOriented;
+    }
+
+    public void setBrakeMode() {
+        for(SwerveModule module : swerveModules) {
+            module.setBrakeMode();
+        }
+    }
+
+    public void setCoastMode() {
+        for(SwerveModule module : swerveModules) {
+            module.setCoastMode();
+        }
     }
 }
