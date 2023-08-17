@@ -63,12 +63,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
         swerveOdometry = new SwerveDriveOdometry(DriveConstants.swerveKinematics, gyroscope.getRotation2d(), getModulePositions());
 
         // set drift correction PID
-        driftCorrectionStat = new PIDController(0.01, 0.0005, 0);
+        driftCorrectionStat = new PIDController(0.05, 0.00, 0.00);
         driftCorrectionStat.enableContinuousInput(-180, 180);
-        driftCorrectionRot = new PIDController(0.2, 0.0, 0);
+        driftCorrectionRot = new PIDController(0.02, 0.0, 0);
         driftCorrectionRot.enableContinuousInput(-180, 180);
 
         lastPigeonAngle = gyroscope.getAngle();
+
+        Shuffleboard.getTab("drift").addNumber("gyro", () -> gyroscope.getAngle());
+        Shuffleboard.getTab("drift").addNumber("last angle", () -> lastPigeonAngle);
+
     }
 
     /**
@@ -84,13 +88,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void drive(Translation2d translationalVelocity, double rotationalVelocity) {
         drive(translationalVelocity, rotationalVelocity, fieldOriented);
     }  
-    
+
     // sets drive signal with the translational and rotational velocities.
     public void drive(Translation2d translationalVelocity, double rotationalVelocity, boolean fieldOriented) {
         driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, fieldOriented);
 
         rotationFlag = Math.abs(rotationalVelocity) > 0.1;
-        drivingFlag = Math.abs(translationalVelocity.getNorm()) > 0.01;
+        drivingFlag = Math.abs(translationalVelocity.getNorm()) > 0.1;
     } 
     
     // drive correction code
@@ -99,9 +103,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         if(!rotationFlag && drivingFlag) {
             s.omegaRadiansPerSecond = 
-                -driftCorrectionStat.calculate(gyroscope.getAngle() % 360, lastPigeonAngle % 360)
+                -driftCorrectionStat.calculate(gyroscope.getAngle(), lastPigeonAngle)
                 * DriveConstants.maxAngularVelocity;
-        } else {
+        } 
+        // else if (rotationFlag && drivingFlag) {
+        //     // double expectedChange = s.omegaRadiansPerSecond * 0.02 * 180/Math.PI;
+        //     // s.omegaRadiansPerSecond += 
+        //     //     driftCorrectionRot.calculate(gyroscope.getAngle(), (lastPigeonAngle-expectedChange));
+        // }
+         else {
             lastPigeonAngle = gyroscope.getAngle();
         }
 
