@@ -39,10 +39,12 @@
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": false,
+      "isStopPoint": true,
       "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
+        "names": [
+          "test"
+        ],
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }
@@ -123,5 +125,14 @@
   "maxVelocity": null,
   "maxAcceleration": 2.0,
   "isReversed": null,
-  "markers": []
+  "markers": [
+    {
+      "position": 1.585454545454526,
+      "names": [
+        "event",
+        "omg",
+        "tEST"
+      ]
+    }
+  ]
 }

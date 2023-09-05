@@ -143,6 +143,22 @@ public final class Constants {
     
     }
 
+    public static class ArmConstants {
+        public static final int ROTATION_LEFT_ID = 21; // update
+        public static final int ROTATION_RIGHT_ID = 22; // update
+        public static final int ROTATION_POT_CHANNEl = 0;
+
+        public static final int EXTENSION_ID = 23;
+
+        public static final int RETRACTION_LIMIT_CHANNEL = 9;
+        public static final int EXTENSION_LIMIT_CHANNEL = 1;
+
+        public static final double ROTATION_MAX_VELOCITY = 0.05; // in rotations per second (FINAL)
+        public static final double EXTENSION_MAX_VELOCITY = 0.75; // in meters per second
+
+        
+    }
+
     // public static class ClawConstants {
     //     public static final int CLAW_ID = 24;
     //     public static final int CLAW_POT_CHANNEL = 1;
