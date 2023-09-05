@@ -10,6 +10,10 @@ public abstract class Waypoint {
         public Map<String, Double> anchorPoint;
         @Expose
         public double holonomicAngle;
+        @Expose
+        public boolean isStopPoint;
+        @Expose 
+        public StopEvent stopEvent;
         public double time;
     }
 }
