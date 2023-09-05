@@ -17,7 +17,8 @@ public class RobotContainer {
     public final CommandXboxController secondaryController = new CommandXboxController(1);
 
     private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
-    private final ArmSubsystem armSubsystem = new ArmSubsystem();
+    private final Vision visionSubsystem = new Vision();
+   // private final ArmSubsystem armSubsystem = new ArmSubsystem();
 
     public RobotContainer() {
         drivetrainSubsystem.setDefaultCommand(
@@ -29,14 +30,14 @@ public class RobotContainer {
             )
         );
 
-        armSubsystem.setDefaultCommand(
-            new ArmCommand(
-                armSubsystem,
-                new Axis(() -> secondaryController.getLeftTriggerAxis()),
-                new Axis(() -> secondaryController.getRightTriggerAxis()),
-                new Axis(() -> secondaryController.getLeftY())
-            )
-        );
+        // armSubsystem.setDefaultCommand(
+        //     new ArmCommand(
+        //         armSubsystem,
+        //         new Axis(() -> secondaryController.getLeftTriggerAxis()),
+        //         new Axis(() -> secondaryController.getRightTriggerAxis()),
+        //         new Axis(() -> secondaryController.getLeftY())
+        //     )
+        // );
 
         configureButtonBindings();
     }
@@ -54,9 +55,9 @@ public class RobotContainer {
         return this.drivetrainSubsystem;
     }
 
-    public ArmSubsystem getArmSubsystem() {
-        return this.armSubsystem;
-    }
+    // public ArmSubsystem getArmSubsystem() {
+    //     return this.armSubsystem;
+    // }
 
     // add all non-default commands to this. I may make this a map instead...
     public Command getCommand(String command) {

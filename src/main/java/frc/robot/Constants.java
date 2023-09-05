@@ -168,4 +168,16 @@ public final class Constants {
     //     public static final double CLAW_FULLY_OPENED = 0;
     //     public static final double CLAW_FULLY_CLOSED = 0;
     //   }
+
+    public static class LimelightConstants {
+        public static final double LIMELIGHT_ANGLE = 0;
+        public static final double LIMELIGHT_HEIGHT = 49.25;
+        public static final double LIMELIGHT_X_OFFSET = 7; // to the right is positive
+        public static final double LIMELIGHT_Y_OFFSET = 4; // forward is positive
+    
+        public static final double DESIRED_FIDUCIAL_AREA = 1.29;
+    
+        public static final double D_Z = 1.0; // Alligned forward backward
+        public static final double D_X = 0.0; // Alligned left right
+      }
 }
