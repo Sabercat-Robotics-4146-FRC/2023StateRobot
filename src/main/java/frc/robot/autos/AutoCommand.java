@@ -6,8 +6,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -41,8 +43,12 @@ public class AutoCommand extends CommandBase {
     Translation2d lastPosition;
 
     Trajectory.State lastState;
+    Waypoint waypoint;
 
-    List<Waypoint.State> waypoints;
+    Queue<Waypoint> waypoints;
+    Queue<Marker> markers;
+
+    double rotationalVelocity;
 
     RobotContainer container;
 
@@ -85,31 +91,32 @@ public class AutoCommand extends CommandBase {
                         .excludeFieldsWithoutExposeAnnotation()
                         .create();
 
-        Type type = new TypeToken<List<Waypoint.State>>() {}.getType();
-        waypoints = gson.fromJson(json, type);
+        Type type = new TypeToken<frc.robot.autos.Path>() {}.getType();
+        frc.robot.autos.Path path = gson.fromJson(json, type);
 
         int i = 0;
         for(Trajectory.State state : trajectory.getStates()) {
-            if(i < waypoints.size() - 1 
-                && state.poseMeters.getX() == waypoints.get(i).anchorPoint.get("x")
-                && state.poseMeters.getY() == waypoints.get(i).anchorPoint.get("y")) {
-                    waypoints.get(i++).time = state.timeSeconds;
+            if(i < path.waypoints.size() - 1 
+                && state.poseMeters.getX() == path.waypoints.get(i).anchorPoint.get("x")
+                && state.poseMeters.getY() == path.waypoints.get(i).anchorPoint.get("y")) {
+                    path.waypoints.get(i++).time = state.timeSeconds;
                 }
         }
 
-        waypoints.get(waypoints.size() - 1).time = trajectory.getTotalTimeSeconds();
+        path.waypoints.get(path.waypoints.size() - 1).time = trajectory.getTotalTimeSeconds();
+
+        waypoints = new LinkedList<>(path.waypoints);
+        markers = new LinkedList<>(path.markers);
 
         timer.restart();
     }
 
-    int i = 1;
     @Override
     public void execute() {
-        Waypoint.State waypoint = waypoints.get(i);
-
         // run stop point commands sequentially
-        if(waypoints.get(i).isStopPoint) {
-            waypoints.get(i).isStopPoint = false;
+        if(waypoint.isStopPoint) {
+            drivetrain.drive(new Translation2d(0, 0),0,false); // stop the drivetrain
+            waypoint.isStopPoint = false;
             SequentialCommandGroup sequentialCommandGroup = new SequentialCommandGroup();
             StopEvent stopEvent = waypoint.stopEvent;
             for(String str : stopEvent.names) {
@@ -121,6 +128,20 @@ public class AutoCommand extends CommandBase {
         var desiredState = trajectory.sample(timer.get());
         if(lastState == null) lastState = desiredState;
 
+        double lastTime = lastState.timeSeconds;
+        double curTime = desiredState.timeSeconds;
+        if(waypoint == null || waypoint.time < curTime) {
+            Waypoint nextWaypoint = waypoints.poll();
+            if(waypoint == null) {
+                rotationalVelocity = (nextWaypoint.holonomicAngle * (Math.PI / 180)) / nextWaypoint.time;
+            } else {
+                rotationalVelocity = 
+                    ((nextWaypoint.holonomicAngle - waypoint.holonomicAngle)* (Math.PI / 180)) / (nextWaypoint.time - waypoint.time);
+            }
+
+
+        }
+
         Translation2d curPosition = new Translation2d(
             desiredState.poseMeters.getX(),
             desiredState.poseMeters.getY());
@@ -129,21 +150,11 @@ public class AutoCommand extends CommandBase {
             (curPosition.getX() - lastPosition.getX()) / (desiredState.timeSeconds - lastState.timeSeconds),
             (curPosition.getY() - lastPosition.getY()) / (desiredState.timeSeconds - lastState.timeSeconds)
         );
-            
-        double waypointTime = waypoints.get(i).time;
-        double lastTime = lastState.timeSeconds;
-        double curTime = desiredState.timeSeconds;
-        if((waypointTime < lastTime && waypointTime > curTime) || (waypointTime > lastTime && waypointTime < curTime)) {
-            i++;
-        }
-
-        double rot = ((waypoints.get(i).holonomicAngle * (Math.PI / 180))
-                        - ((Math.PI / 180) * waypoints.get(i-1).holonomicAngle))/(waypoints.get(i).time - waypoints.get(i-1).time);
 
         lastPosition = curPosition;
         lastState = desiredState;
 
-        drivetrain.drive(desiredTranslation, rot, true);
+        drivetrain.drive(desiredTranslation, rotationalVelocity, true);
     } 
 
     @Override

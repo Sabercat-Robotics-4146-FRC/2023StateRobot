@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.google.gson.annotations.Expose;
 
-public abstract class StopEvent {
+public abstract class Path {
     @Expose
-    public List<String> names;
+    public List<Waypoint> waypoints;
     @Expose
-    public String executionBehavior;
+    public List<Marker> markers;
 }
