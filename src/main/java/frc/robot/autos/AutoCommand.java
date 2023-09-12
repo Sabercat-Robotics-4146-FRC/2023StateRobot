@@ -48,7 +48,7 @@ public class AutoCommand extends CommandBase {
     Queue<Waypoint> waypoints;
     Queue<Marker> markers;
 
-    double rotationalVelocity;
+    double rotationalVelocity = 0;
 
     RobotContainer container;
 
@@ -94,17 +94,6 @@ public class AutoCommand extends CommandBase {
         Type type = new TypeToken<frc.robot.autos.Path>() {}.getType();
         frc.robot.autos.Path path = gson.fromJson(json, type);
 
-        int i = 0;
-        for(Trajectory.State state : trajectory.getStates()) {
-            if(i < path.waypoints.size() - 1 
-                && state.poseMeters.getX() == path.waypoints.get(i).anchorPoint.get("x")
-                && state.poseMeters.getY() == path.waypoints.get(i).anchorPoint.get("y")) {
-                    path.waypoints.get(i++).time = state.timeSeconds;
-                }
-        }
-
-        path.waypoints.get(path.waypoints.size() - 1).time = trajectory.getTotalTimeSeconds();
-
         waypoints = new LinkedList<>(path.waypoints);
         markers = new LinkedList<>(path.markers);
 
@@ -114,33 +103,32 @@ public class AutoCommand extends CommandBase {
     @Override
     public void execute() {
         // run stop point commands sequentially
-        if(waypoint.isStopPoint) {
-            drivetrain.drive(new Translation2d(0, 0),0,false); // stop the drivetrain
-            waypoint.isStopPoint = false;
-            SequentialCommandGroup sequentialCommandGroup = new SequentialCommandGroup();
-            StopEvent stopEvent = waypoint.stopEvent;
-            for(String str : stopEvent.names) {
-                sequentialCommandGroup.addCommands(container.getCommand(str));
-            }
-            sequentialCommandGroup.execute();
-        }
+        // if(waypoint.isStopPoint) {
+        //     drivetrain.drive(new Translation2d(0, 0),0,false); // stop the drivetrain
+        //     waypoint.isStopPoint = false;
+        //     SequentialCommandGroup sequentialCommandGroup = new SequentialCommandGroup();
+        //     StopEvent stopEvent = waypoint.stopEvent;
+        //     for(String str : stopEvent.names) {
+        //         sequentialCommandGroup.addCommands(container.getCommand(str));
+        //     }
+        //     sequentialCommandGroup.execute();
+        // }
 
-        var desiredState = trajectory.sample(timer.get());
+        var desiredState = trajectory.sample(timer.get()); // the next state, or, the state we are attempting to acheive 
         if(lastState == null) lastState = desiredState;
 
-        double lastTime = lastState.timeSeconds;
-        double curTime = desiredState.timeSeconds;
-        if(waypoint == null || waypoint.time < curTime) {
-            Waypoint nextWaypoint = waypoints.poll();
-            if(waypoint == null) {
-                rotationalVelocity = (nextWaypoint.holonomicAngle * (Math.PI / 180)) / nextWaypoint.time;
-            } else {
-                rotationalVelocity = 
-                    ((nextWaypoint.holonomicAngle - waypoint.holonomicAngle)* (Math.PI / 180)) / (nextWaypoint.time - waypoint.time);
-            }
-
-
-        }
+        // // at the start or when the robot reaches a waypoint, update the current waypoint and rotational velocity
+        // double curTime = desiredState.timeSeconds;
+        // if(!waypoints.isEmpty() && (waypoint == null || waypoint.time < curTime)) {
+        //     Waypoint nextWaypoint = waypoints.poll();
+        //     if(waypoint == null) { // start
+        //         rotationalVelocity = (nextWaypoint.holonomicAngle * (Math.PI / 180)) / nextWaypoint.time;
+        //     } else { // at waypoint
+        //         rotationalVelocity = 
+        //             ((nextWaypoint.holonomicAngle - waypoint.holonomicAngle)* (Math.PI / 180)) / (nextWaypoint.time - waypoint.time);
+        //     }
+        //     waypoint = nextWaypoint;
+        // }
 
         Translation2d curPosition = new Translation2d(
             desiredState.poseMeters.getX(),

@@ -13,5 +13,4 @@ public abstract class Waypoint {
     public boolean isStopPoint;
     @Expose 
     public StopEvent stopEvent;
-    public double time;
 }
