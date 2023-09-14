@@ -154,18 +154,18 @@ public final class Constants {
         public static final int EXTENSION_LIMIT_CHANNEL = 1;
 
         public static final double ROTATION_MAX_VELOCITY = 0.05; // in rotations per second (FINAL)
-        public static final double EXTENSION_MAX_VELOCITY = 0.75; // in meters per second
+        public static final double EXTENSION_MAX_VELOCITY = 0.2; // in meters per second
 
         
     }
 
-    // public static class ClawConstants {
-    //     public static final int CLAW_ID = 24;
-    //     public static final int CLAW_POT_CHANNEL = 1;
+    public static class ClawConstants {
+        public static final int CLAW_ID = 24;
+        public static final int CLAW_POT_CHANNEL = 1;
     
-    //     public static final double CLAW_CONE_MID = 796.0 / 1024.0;
-    //     public static final double CLAW_CUBE = 0;
-    //     public static final double CLAW_FULLY_OPENED = 0;
-    //     public static final double CLAW_FULLY_CLOSED = 0;
-    //   }
+        public static final double CLAW_CONE_MID = 796.0 / 1024.0;
+        public static final double CLAW_CUBE = 0;
+        public static final double CLAW_FULLY_OPENED = 0;
+        public static final double CLAW_FULLY_CLOSED = 0;
+      }
 }
