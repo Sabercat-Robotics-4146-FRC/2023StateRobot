@@ -146,7 +146,7 @@ public final class Constants {
     public static class ArmConstants {
         public static final int ROTATION_LEFT_ID = 21; // update
         public static final int ROTATION_RIGHT_ID = 22; // update
-        public static final int ROTATION_POT_CHANNEl = 0;
+        public static final int ROTATION_POT_CHANNEL = 0;
 
         public static final int EXTENSION_ID = 23;
 

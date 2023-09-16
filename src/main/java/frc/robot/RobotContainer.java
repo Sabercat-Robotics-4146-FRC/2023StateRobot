@@ -17,6 +17,7 @@ public class RobotContainer {
 
     private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
     // private final ArmSubsystem armSubsystem = new ArmSubsystem();
+    // private final ClawSubsystem clawSubsystem = new ClawSubsystem();
 
     public RobotContainer() {
         drivetrainSubsystem.setDefaultCommand(
@@ -43,7 +44,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         primaryController.a().onTrue(Commands.runOnce(drivetrainSubsystem::toggleFieldOriented));
         primaryController.start().onTrue(Commands.runOnce(drivetrainSubsystem.gyroscope::reset));
-        secondaryController.b().onTrue(Commands.runOnce(clawSubsystem::toggleClaw));
+        //secondaryController.b().onTrue(Commands.runOnce(clawSubsystem::toggleClaw));
     }
  
     public Command getAutonomousCommand() {
