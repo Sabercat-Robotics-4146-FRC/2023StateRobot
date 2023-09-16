@@ -154,7 +154,7 @@ public final class Constants {
         public static final int EXTENSION_LIMIT_CHANNEL = 1;
 
         public static final double ROTATION_MAX_VELOCITY = 0.05; // in rotations per second (FINAL)
-        public static final double EXTENSION_MAX_VELOCITY = 0.2; // in meters per second
+        public static final double EXTENSION_MAX_VELOCITY = 0.75; // in meters per second
 
         
     }
