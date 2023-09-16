@@ -1,8 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -10,11 +7,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClawConstants;
 
-public class Claw extends SubsystemBase {
+public class ClawSubsystem extends SubsystemBase {
   public CANSparkMax clawMotor;
-  private boolean clawEnabled;
+  public boolean clawEnabled;
 
-  public Claw() {
+  public ClawSubsystem() {
     clawMotor = new CANSparkMax(ClawConstants.CLAW_ID, MotorType.kBrushless);
 
     clawEnabled = false;
@@ -26,17 +23,19 @@ public class Claw extends SubsystemBase {
 
   public void toggleClaw() {
     clawEnabled = !clawEnabled;
-    if(clawEnabled) clawMotor.setVoltage(6);
+
+    if(clawEnabled) clawMotor.setVoltage(ClawConstants.HIGH_VOLTAGE);
     else clawMotor.stopMotor();
   }
 
   @Override
   public void periodic() {
       // if motor hits spike limit, lower voltage to hold in place
-      if(clawEnabled && clawMotor.getOutputCurrent() > 20) {
-        clawMotor.setVoltage(0.5);
+      if(clawEnabled && clawMotor.getOutputCurrent() > ClawConstants.CURRENT_LIMIT) {
+        clawMotor.setVoltage(ClawConstants.LOW_VOLTAGE);
       }
-      SmartDashboard.putNumber("current", clawMotor.getOutputCurrent());
+
+      SmartDashboard.putNumber("Claw Current", clawMotor.getOutputCurrent());
   }
 
 }

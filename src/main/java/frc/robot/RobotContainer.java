@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -18,7 +17,7 @@ public class RobotContainer {
 
     private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
     private final ArmSubsystem armSubsystem = new ArmSubsystem();
-    private final Claw clawSubsystem = new Claw();
+    private final ClawSubsystem clawSubsystem = new ClawSubsystem();
 
     public RobotContainer() {
         drivetrainSubsystem.setDefaultCommand(
