@@ -18,7 +18,7 @@ public class ClawSubsystem extends SubsystemBase {
 
     clawEnabled = false;
 
-    clawMotor.setSmartCurrentLimit(80);
+    clawMotor.setSmartCurrentLimit(60);
     clawMotor.enableVoltageCompensation(12);
     clawMotor.setOpenLoopRampRate(.5);
 
@@ -30,16 +30,16 @@ public class ClawSubsystem extends SubsystemBase {
 
     if(clawEnabled) {
       clawMotor.setVoltage(ClawConstants.HIGH_VOLTAGE);
-      timer.restart();
-    } else clawMotor.setVoltage(-0.75);
+      timer.restart();                   // restart timer when claw is toggled
+    } else clawMotor.setVoltage(-0.75);  // expel game piece
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Claw Current", clawMotor.getOutputCurrent());
     
-    // if motor hits spike limit, lower voltage to hold in place
-    if(timer.hasElapsed(0.3) && clawEnabled && clawMotor.getOutputCurrent() > ClawConstants.CURRENT_LIMIT) {
+    // if motor hits spike limit and has run for the min period, lower voltage to hold in place without overheating
+    if(timer.hasElapsed(ClawConstants.MIN_RUNTIME) && clawEnabled && clawMotor.getOutputCurrent() > ClawConstants.CURRENT_LIMIT) {
       clawMotor.setVoltage(ClawConstants.LOW_VOLTAGE);
       SmartDashboard.putBoolean("Lower", true);
     }
