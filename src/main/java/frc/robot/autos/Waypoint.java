@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.google.gson.annotations.Expose;
 
-public abstract class Waypoint {
+public class Waypoint {
     @Expose
     public Map<String, Double> anchorPoint;
     @Expose

@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.gson.annotations.Expose;
 
-public abstract class Marker {
+public class Marker {
     @Expose
     public double position;
     @Expose

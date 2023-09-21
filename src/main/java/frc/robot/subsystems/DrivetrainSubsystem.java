@@ -145,7 +145,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public void updateModules(SwerveModuleState[] desiredStates) {
-       // desiredStates = driftCorrection(desiredStates);
+        desiredStates = driftCorrection(desiredStates);
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.maxSpeed);
         for(SwerveModule mod : swerveModules){
             SmartDashboard.putNumber(mod.moduleName, mod.getState().angle.getDegrees());
