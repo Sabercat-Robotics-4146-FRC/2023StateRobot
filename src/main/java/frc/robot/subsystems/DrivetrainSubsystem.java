@@ -177,6 +177,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void periodic(){
         swerveOdometry.update(gyroscope.getRotation2d(), getModulePositions()); 
         update(driveSignal);
+        for (SwerveModule swerveModule : swerveModules)
+            swerveModule.postTelemetry();
     }
 
     public void toggleFieldOriented() {

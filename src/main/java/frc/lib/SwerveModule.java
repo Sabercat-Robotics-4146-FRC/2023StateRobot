@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.lib.math.Conversions;
@@ -138,5 +139,19 @@ public class SwerveModule {
             Conversions.falconToMeters(mDriveMotor.getSelectedSensorPosition(), DriveConstants.wheelCircumference, DriveConstants.driveGearRatio), 
             getAngle()
         );
+    }
+
+    public void postTelemetry() {
+        var moduleLayout = Shuffleboard.getTab("Telemetry")
+            .getLayout(moduleName, BuiltInLayouts.kList)
+            .withSize(2, 6);
+
+        moduleLayout.addNumber("Drive Voltage", mDriveMotor::getMotorOutputVoltage);
+        moduleLayout.addNumber("Drive Current", mDriveMotor::getStatorCurrent);
+        moduleLayout.addNumber("Angle Voltage", mAngleMotor::getMotorOutputVoltage);
+        moduleLayout.addNumber("Angle Current", mAngleMotor::getStatorCurrent);
+        
+        moduleLayout.addNumber("Drive Sensor Position", mDriveMotor::getSelectedSensorPosition);
+        moduleLayout.addNumber("Angle Sensor Position", mAngleMotor::getSelectedSensorPosition);
     }
 }
