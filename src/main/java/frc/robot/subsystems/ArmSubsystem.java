@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
@@ -14,6 +15,8 @@ public class ArmSubsystem extends SubsystemBase {
     public TalonFX rotationMotorLeft, rotationMotorRight, extensionMotor;
     public AnalogPotentiometer potentiometer;
     public DigitalInput extLimit, retLimit;
+
+    private Timer timer;
 
     public ArmSubsystem() {
         rotationMotorLeft = new TalonFX(ArmConstants.ROTATION_LEFT_ID);
@@ -40,6 +43,8 @@ public class ArmSubsystem extends SubsystemBase {
 
         extLimit = new DigitalInput(ArmConstants.EXTENSION_LIMIT_CHANNEL);
         retLimit = new DigitalInput(ArmConstants.RETRACTION_LIMIT_CHANNEL);
+
+        timer = new Timer();
     }
 
     /**
@@ -60,7 +65,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setExtensionVelocity(double ms) {
-        if((extLimit.get() && ms > 0) || (retLimit.get() && ms < 0)) {
+        if((extLimit.get() && ms < 0) || (retLimit.get() && ms > 0)) {
             extensionMotor.set(ControlMode.Velocity, 0);
             return;
         }
@@ -72,7 +77,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         double rv = 15 * ((ms / (.040 * Math.PI)) * 2048) / 10;
 
-        extensionMotor.set(ControlMode.Velocity, rv);
+        extensionMotor.set(ControlMode.Velocity, rv == 0 ? timer.hasElapsed(2000) ? -0.05 : 0 : rv);
         SmartDashboard.putNumber("Extension Velocity", extensionMotor.getSelectedSensorVelocity(0));
         SmartDashboard.putNumber("Target EV", rv);
 
