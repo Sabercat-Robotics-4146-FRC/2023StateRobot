@@ -25,13 +25,17 @@ public class ClawSubsystem extends SubsystemBase {
     timer = new Timer();
   }
 
-  public void toggleClaw() {
-    clawEnabled = !clawEnabled;
-
-    if(clawEnabled) {
+  public void toggleClaw(boolean toggle) {
+    clawEnabled = toggle;
+    
+    if(toggle) {
       clawMotor.setVoltage(ClawConstants.HIGH_VOLTAGE);
       timer.restart();                   // restart timer when claw is toggled
     } else clawMotor.setVoltage(-0.75);  // expel game piece
+  }
+
+  public void toggleClaw() {
+    toggleClaw(!clawEnabled);
   }
 
   @Override
