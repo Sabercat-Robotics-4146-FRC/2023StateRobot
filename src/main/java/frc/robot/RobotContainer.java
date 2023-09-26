@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -20,6 +21,11 @@ public class RobotContainer {
     private final ClawSubsystem clawSubsystem = new ClawSubsystem();
 
     public RobotContainer() {
+        CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
+        CommandScheduler.getInstance().registerSubsystem(armSubsystem);
+        CommandScheduler.getInstance().registerSubsystem(clawSubsystem);
+
+
         drivetrainSubsystem.setDefaultCommand(
             new DriveCommand(
                 drivetrainSubsystem, 
@@ -32,9 +38,9 @@ public class RobotContainer {
         armSubsystem.setDefaultCommand(
             new ArmCommand(
                 armSubsystem,
-                new Axis(() -> secondaryController.getLeftTriggerAxis()),
                 new Axis(() -> secondaryController.getRightTriggerAxis()),
-                new Axis(() -> secondaryController.getLeftY())
+                new Axis(() -> secondaryController.getLeftTriggerAxis()),
+                new Axis(() -> secondaryController.getRightY())
             )
         );
 
@@ -57,6 +63,10 @@ public class RobotContainer {
 
     public ArmSubsystem getArmSubsystem() {
         return this.armSubsystem;
+    }
+
+    public ClawSubsystem getClawSubsystem() { 
+        return clawSubsystem;
     }
 
     // add all non-default commands to this. I may make this a map instead...
