@@ -14,7 +14,10 @@ import frc.robot.Constants.ArmConstants;
 public class ArmSubsystem extends SubsystemBase {
     public TalonFX rotationMotorLeft, rotationMotorRight, extensionMotor;
     public AnalogPotentiometer potentiometer;
-    public DigitalInput extLimit, retLimit;
+    public DigitalInput extLimitSwitch, retLimitSwitch;
+
+    public int extLimit = 0;
+    public int retLimit = 0;
 
     private Timer timer;
 
@@ -41,8 +44,8 @@ public class ArmSubsystem extends SubsystemBase {
 
         potentiometer = new AnalogPotentiometer(ArmConstants.ROTATION_POT_CHANNEL);
 
-        extLimit = new DigitalInput(ArmConstants.EXTENSION_LIMIT_CHANNEL);
-        retLimit = new DigitalInput(ArmConstants.RETRACTION_LIMIT_CHANNEL);
+        extLimitSwitch = new DigitalInput(ArmConstants.EXTENSION_LIMIT_CHANNEL);
+        retLimitSwitch = new DigitalInput(ArmConstants.RETRACTION_LIMIT_CHANNEL);
 
         timer = new Timer();
     }
@@ -65,10 +68,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setExtensionVelocity(double ms) {
-        if((extLimit.get() && ms < 0) || (retLimit.get() && ms > 0)) {
-            extensionMotor.set(ControlMode.Velocity, 0);
-            return;
-        }
+        //if(!extLimitSwitch.get()) extLimit = 
 
         // convert to units/100ms from meters/second
         // steps per rotation: 2048

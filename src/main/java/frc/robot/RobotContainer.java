@@ -32,9 +32,9 @@ public class RobotContainer {
         armSubsystem.setDefaultCommand(
             new ArmCommand(
                 armSubsystem,
-                new Axis(() -> secondaryController.getLeftTriggerAxis()),
                 new Axis(() -> secondaryController.getRightTriggerAxis()),
-                new Axis(() -> secondaryController.getLeftY())
+                new Axis(() -> secondaryController.getLeftTriggerAxis()),
+                new Axis(() -> secondaryController.getRightY())
             )
         );
 
