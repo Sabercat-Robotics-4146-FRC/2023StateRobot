@@ -128,9 +128,10 @@ public class AutoCommand extends CommandBase {
 
         lastPosition = curPosition;
         lastState = desiredState;
-        hrot = desiredState.holonomicRotation;
+        hrot = desiredState.holonomicAngularVelocity * Math.PI / 180;
+        SmartDashboard.putNumber("WTF IS THIS", desiredState.getPose().getX());
 
-        //drivetrain.drive(desiredTranslation, desiredState.holonomicAngularVelocity, true);
+        drivetrain.drive(desiredTranslation, desiredState.holonomicAngularVelocity * Math.PI / 180, true);
     } 
 
     @Override

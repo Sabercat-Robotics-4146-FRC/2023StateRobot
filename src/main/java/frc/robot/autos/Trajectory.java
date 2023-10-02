@@ -209,20 +209,34 @@ public class Trajectory {
 
     public class Pose {
         @Expose 
-        public double radians;
+        public Rotation rotation;
         @Expose
-        public double x;
-        @Expose
-        public double y;
+        public Translation translation;
 
         public Pose(Pose2d pose) {
-            this.radians = pose.getRotation().getRadians();
-            this.x = pose.getX();
-            this.y = pose.getY();
+            this.rotation = new Rotation(pose.getRotation().getRadians());
+            this.translation = new Translation(pose.getX(), pose.getY());
         }
 
         public Pose2d getPose() {
-            return new Pose2d(new Translation2d(x, y), new Rotation2d(radians));
+            return new Pose2d(new Translation2d(translation.x, translation.y), new Rotation2d(rotation.radians));
+        }
+
+        class Rotation {
+            @Expose
+            public double radians;
+            public Rotation(double r) {radians = r;}
+        };
+
+        class Translation {
+            @Expose
+            public double x;
+            @Expose
+            public double y;
+            public Translation(double x, double y) {
+                this.x = x;
+                this.y = y;
+            }
         }
     }
 }
