@@ -16,13 +16,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -49,13 +47,15 @@ public class AutoCommand extends CommandBase {
 
     RobotContainer container;
 
+    double hrot = 0;
+
     public AutoCommand(RobotContainer container) {
         this.drivetrain = container.getDrivetrainSubsystem();
         this.container = container;
 
         Path path = Filesystem.getDeployDirectory().toPath().resolve("pathplanner/generatedJSON/New Path.wpilib.json");
         try {
-            this.trajectory = TrajectoryUtil.fromPathweaverJson(path);
+            this.trajectory = new Trajectory(path);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -65,11 +65,14 @@ public class AutoCommand extends CommandBase {
         lastPosition = new Translation2d(0, 0);
 
         addRequirements(drivetrain);
+
+        ShuffleboardTab tab = Shuffleboard.getTab("AUTO TEST");
+        tab.addNumber("Holonomic Angle", () -> hrot);
     }
 
     @Override
     public void initialize() {
-        drivetrain.resetOdometry(trajectory.getInitialPose());
+        drivetrain.resetOdometry(trajectory.sample(0).getPose());
         drivetrain.getGyro().reset();
         drivetrain.setBrakeMode();
 
@@ -115,24 +118,23 @@ public class AutoCommand extends CommandBase {
         if(lastState == null) lastState = desiredState;
 
         Translation2d curPosition = new Translation2d(
-            desiredState.poseMeters.getX(),
-            desiredState.poseMeters.getY());
+            desiredState.getPose().getX(),
+            desiredState.getPose().getY());
 
         Translation2d desiredTranslation = new Translation2d(
-            (curPosition.getX() - lastPosition.getX()) / (desiredState.timeSeconds - lastState.timeSeconds),
-            (curPosition.getY() - lastPosition.getY()) / (desiredState.timeSeconds - lastState.timeSeconds)
+            (curPosition.getX() - lastPosition.getX()) / (desiredState.time - lastState.time),
+            (curPosition.getY() - lastPosition.getY()) / (desiredState.time - lastState.time)
         );
-
-        //double desiredRotation = 
 
         lastPosition = curPosition;
         lastState = desiredState;
+        hrot = desiredState.holonomicRotation;
 
-        drivetrain.drive(desiredTranslation, desiredRotation, true);
+        //drivetrain.drive(desiredTranslation, desiredState.holonomicAngularVelocity, true);
     } 
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(trajectory.getTotalTimeSeconds());
+        return timer.hasElapsed(trajectory.trajectory.get(trajectory.trajectory.size()-1).time);
     }  
 }
