@@ -44,13 +44,19 @@ public class RobotContainer {
             )
         );
 
+        clawSubsystem.setDefaultCommand(
+            new ClawCommand(
+                clawSubsystem,
+                secondaryController.getHID()
+            )
+        );
+
         configureButtonBindings();
     }
 
     private void configureButtonBindings() {
         primaryController.a().onTrue(Commands.runOnce(drivetrainSubsystem::toggleFieldOriented));
         primaryController.start().onTrue(Commands.runOnce(drivetrainSubsystem.gyroscope::reset));
-        secondaryController.b().onTrue(Commands.runOnce(clawSubsystem::toggleClaw));
     }
  
     public Command getAutonomousCommand() {
