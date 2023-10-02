@@ -20,6 +20,7 @@ public class Robot extends TimedRobot {
     ctreConfigs = new CTREConfigs();
 
     m_robotContainer = new RobotContainer();
+    m_robotContainer.startLogging();
   }
 
   @Override

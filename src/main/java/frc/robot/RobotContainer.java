@@ -6,11 +6,13 @@ import java.nio.file.Path;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -76,5 +78,30 @@ public class RobotContainer {
             DriverStation.reportError(e.getMessage(), e.getStackTrace());
         }
         return null;
+    }
+
+    public void startLogging() {
+        // start logging through WPILib
+        DataLogManager.start();
+        // enable logging of driver station events & joystick info
+        DriverStation.startDataLog(DataLogManager.getLog());
+        
+        // add hooks to log when commands are initialized & finished
+        var scheduler = CommandScheduler.getInstance();
+        scheduler.onCommandInitialize(command -> {
+            DataLogManager.log(
+                String.format("Initializing command %s", command.getName())
+            );
+        });
+        scheduler.onCommandFinish(command -> {
+            DataLogManager.log(
+                String.format("Finishing command %s", command.getName())
+            );
+        });
+        scheduler.onCommandInterrupt(command -> {
+            DataLogManager.log(
+                String.format("Interrupting command %s", command.getName())
+            );
+        });
     }
 }
