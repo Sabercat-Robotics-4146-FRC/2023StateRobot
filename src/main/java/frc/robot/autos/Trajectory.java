@@ -25,6 +25,10 @@ public class Trajectory {
         trajectory = new ArrayList<>();
     }
 
+    public Trajectory(List<Trajectory.State> list) {
+        this.trajectory = list;
+    }
+
     public Trajectory(Path path) throws IOException {
         String json = "";
         try {

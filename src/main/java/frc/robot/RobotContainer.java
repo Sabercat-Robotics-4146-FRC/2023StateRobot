@@ -55,10 +55,10 @@ public class RobotContainer {
         return this.drivetrainSubsystem;
     }
 
-    // public ArmSubsystem getArmSubsystem() {
-    //     // return this.armSubsystem;
-    //     return null;
-    // }
+    public ArmSubsystem getArmSubsystem() {
+        // return this.armSubsystem;
+        return null;
+    }
 
     // add all non-default commands to this. I may make this a map instead...
     public Command getCommand(String command) {
