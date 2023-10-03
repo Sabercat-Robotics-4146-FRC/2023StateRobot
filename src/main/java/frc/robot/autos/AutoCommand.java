@@ -12,10 +12,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.utils.CommandUtil;
 
 public class AutoCommand extends SequentialCommandGroup{    
     DrivetrainSubsystem drivetrain;
@@ -41,35 +41,37 @@ public class AutoCommand extends SequentialCommandGroup{
         drivetrain.setBrakeMode();
         drivetrain.resetOdometry(trajectoryStates.get(0).getPose());
 
-        int lastIndex = 0;
-        int waypointIndex = 0;
-        //int markerIndex = 0;
-        for(int i = 0; i < trajectoryStates.size(); i++) {
-            Trajectory.State state = trajectoryStates.get(i);
-            Waypoint waypoint = waypoints.get(waypointIndex);
-            //Marker marker = markers.get(markerIndex);
+        // int lastIndex = 0;
+        // int waypointIndex = 0;
+        // //int markerIndex = 0;
+        // for(int i = 0; i < trajectoryStates.size(); i++) {
+        //     Trajectory.State state = trajectoryStates.get(i);
+        //     Waypoint waypoint = waypoints.get(waypointIndex);
+        //     //Marker marker = markers.get(markerIndex);
 
-            // if(state.getPose().getX() == marker.anchorPoint.get("x") && 
-            //    state.getPose().getY() == waypoint.anchorPoint.get("y")) {
+        //     // if(state.getPose().getX() == marker.anchorPoint.get("x") && 
+        //     //    state.getPose().getY() == waypoint.anchorPoint.get("y")) {
 
             
 
-            //    for(String s : marker.names)
-            // } 
+        //     //    for(String s : marker.names)
+        //     // } 
 
-            if(state.getPose().getX() == waypoint.anchorPoint.get("x") && 
-               state.getPose().getY() == waypoint.anchorPoint.get("y")) {
-                if(i != lastIndex) {
-                    addCommands(new FollowTrajectoryCommand(container, new Trajectory(trajectoryStates.subList(lastIndex, i))));
-                }
+        //     if(state.getPose().getX() == waypoint.anchorPoint.get("x") && 
+        //        state.getPose().getY() == waypoint.anchorPoint.get("y") && waypoint.isStopPoint) {
+        //         if(i != lastIndex) {
+        //             addCommands(new FollowTrajectoryCommand(container, new Trajectory(trajectoryStates.subList(lastIndex, i))));
+        //         }
                 
-                //addCommands(CommandUtil.getCommand(container, waypoint.stopEvent));
+        //         //addCommands(CommandUtil.getCommand(container, waypoint.stopEvent));
 
-                waypointIndex++;
-            }
-        }
+        //         waypointIndex++;
+        //     }
+        // }
 
-        addCommands(new FollowTrajectoryCommand(container, new Trajectory(trajectoryStates.subList(waypointIndex, trajectoryStates.size()))));
+        SmartDashboard.putNumber("SIZE", trajectoryStates.subList(0, trajectoryStates.size()).size());
+
+        addCommands(new FollowTrajectoryCommand(container, new Trajectory(trajectoryStates.subList(0, trajectoryStates.size()))));
     }
 
     public void readTrajectories() {

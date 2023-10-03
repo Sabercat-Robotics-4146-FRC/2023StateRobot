@@ -94,7 +94,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, fieldOriented);
 
         rotationFlag = Math.abs(rotationalVelocity) > 0.1;
-        drivingFlag = Math.abs(translationalVelocity.getNorm()) > 0.1;
+        drivingFlag = Math.abs(translationalVelocity.getNorm()) > 0.5;
     } 
     
     // drive correction code

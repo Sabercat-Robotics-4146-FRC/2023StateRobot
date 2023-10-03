@@ -2,6 +2,7 @@ package frc.robot.autos;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -21,6 +22,8 @@ public class FollowTrajectoryCommand extends CommandBase {
         this.trajectory = trajectory;
         this.drivetrain = container.getDrivetrainSubsystem();
 
+        lastPosition = new Translation2d(0,0);
+
         timer = new Timer();
         timer.restart();
     }
@@ -28,7 +31,7 @@ public class FollowTrajectoryCommand extends CommandBase {
 
     @Override
     public void execute() {
-        timer.start(); // if the timer is stopped, restart it
+       // timer.start(); // if the timer is stopped, restart it
         var desiredState = trajectory.sample(timer.get()); // the next state, or, the state we are attempting to acheive 
         if(lastState == null) lastState = desiredState;
 
@@ -44,6 +47,13 @@ public class FollowTrajectoryCommand extends CommandBase {
         lastPosition = curPosition;
         lastState = desiredState;
 
-        drivetrain.drive(desiredTranslation, desiredState.holonomicAngularVelocity * Math.PI / 180, true);
+        SmartDashboard.putNumber("TEST HDHH", desiredTranslation.getX());
+
+        drivetrain.drive(desiredTranslation, 0, true);
     } 
+
+    @Override
+    public boolean isFinished() {
+        return timer.hasElapsed(trajectory.trajectory.get(trajectory.trajectory.size()-1).time);
+    }
 }
