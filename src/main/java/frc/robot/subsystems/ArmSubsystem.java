@@ -23,6 +23,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     private Timer timer;
 
+    private double ZERO;
+
     public ArmSubsystem() {
         rotationMotorLeft = new TalonFX(ArmConstants.ROTATION_LEFT_ID);
         rotationMotorRight = new TalonFX(ArmConstants.ROTATION_RIGHT_ID);
@@ -48,6 +50,8 @@ public class ArmSubsystem extends SubsystemBase {
 
         extLimitSwitch = new DigitalInput(ArmConstants.EXTENSION_LIMIT_CHANNEL);
         retLimitSwitch = new DigitalInput(ArmConstants.RETRACTION_LIMIT_CHANNEL);
+
+        ZERO = rotationMotorLeft.getSelectedSensorPosition(0);
 
         timer = new Timer();
 
@@ -99,7 +103,12 @@ public class ArmSubsystem extends SubsystemBase {
 
     }
 
-    public void setRotationPosition() {
+    public void setRotationPosition(double pos) {
+        rotationMotorLeft.set(ControlMode.Position, pos + ZERO);
+        rotationMotorRight.set(ControlMode.Position, pos + ZERO);
+    }
 
+    public void setExtensionPosition(double pos) {
+        extensionMotor.set(ControlMode.Position, pos + retLimit);
     }
 }

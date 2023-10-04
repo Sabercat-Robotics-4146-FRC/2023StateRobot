@@ -107,17 +107,6 @@ public class AutoCommand extends CommandBase {
     public void execute() {
         Waypoint.State waypoint = waypoints.get(i);
 
-        // run stop point commands sequentially
-        if(waypoints.get(i).isStopPoint) {
-            waypoints.get(i).isStopPoint = false;
-            SequentialCommandGroup sequentialCommandGroup = new SequentialCommandGroup();
-            StopEvent stopEvent = waypoint.stopEvent;
-            for(String str : stopEvent.names) {
-                sequentialCommandGroup.addCommands(container.getCommand(str));
-            }
-            sequentialCommandGroup.execute();
-        }
-
         var desiredState = trajectory.sample(timer.get());
         if(lastState == null) lastState = desiredState;
 
