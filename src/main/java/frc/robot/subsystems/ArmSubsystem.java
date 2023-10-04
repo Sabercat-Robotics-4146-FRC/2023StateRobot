@@ -110,6 +110,5 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void setExtensionPosition(double pos) {
         extensionMotor.set(ControlMode.Position, pos + retLimit);
-        
     }
 }
