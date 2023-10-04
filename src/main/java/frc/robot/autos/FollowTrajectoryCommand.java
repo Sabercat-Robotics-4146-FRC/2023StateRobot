@@ -8,8 +8,6 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class FollowTrajectoryCommand extends CommandBase {
-
-
     Translation2d lastPosition;
     Trajectory.State lastState;
     Trajectory trajectory;
@@ -25,13 +23,17 @@ public class FollowTrajectoryCommand extends CommandBase {
         lastPosition = new Translation2d(0,0);
 
         timer = new Timer();
+
+        addRequirements(container.getDrivetrainSubsystem());
+    }
+
+    @Override
+    public void initialize() {
         timer.restart();
     }
 
-
     @Override
     public void execute() {
-       // timer.start(); // if the timer is stopped, restart it
         var desiredState = trajectory.sample(timer.get()); // the next state, or, the state we are attempting to acheive 
         if(lastState == null) lastState = desiredState;
 
@@ -47,7 +49,7 @@ public class FollowTrajectoryCommand extends CommandBase {
         lastPosition = curPosition;
         lastState = desiredState;
 
-        SmartDashboard.putNumber("TEST HDHH", desiredTranslation.getX());
+        SmartDashboard.putNumber("TEST X", desiredTranslation.getX());
 
         drivetrain.drive(desiredTranslation, 0, true);
     } 

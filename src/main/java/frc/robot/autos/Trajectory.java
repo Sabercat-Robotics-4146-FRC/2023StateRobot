@@ -1,6 +1,7 @@
 package frc.robot.autos;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -213,34 +214,17 @@ public class Trajectory {
 
     public class Pose {
         @Expose 
-        public Rotation rotation;
+        public List<Double> rotation;
         @Expose
-        public Translation translation;
+        public List<Double> translation;
 
         public Pose(Pose2d pose) {
-            this.rotation = new Rotation(pose.getRotation().getRadians());
-            this.translation = new Translation(pose.getX(), pose.getY());
+            this.rotation = new ArrayList<>(Arrays.asList(pose.getRotation().getRadians()));
+            this.translation = new ArrayList<>(Arrays.asList(pose.getTranslation().getX(), pose.getTranslation().getY()));
         }
 
         public Pose2d getPose() {
-            return new Pose2d(new Translation2d(translation.x, translation.y), new Rotation2d(rotation.radians));
-        }
-
-        class Rotation {
-            @Expose
-            public double radians;
-            public Rotation(double r) {radians = r;}
-        };
-
-        class Translation {
-            @Expose
-            public double x;
-            @Expose
-            public double y;
-            public Translation(double x, double y) {
-                this.x = x;
-                this.y = y;
-            }
+            return new Pose2d(new Translation2d(translation.get(0), translation.get(1)), new Rotation2d(rotation.get(0)));
         }
     }
 }

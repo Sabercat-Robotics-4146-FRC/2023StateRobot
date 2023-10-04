@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.utils.CommandUtil;
 
 public class AutoCommand extends SequentialCommandGroup{    
     DrivetrainSubsystem drivetrain;
@@ -41,12 +42,12 @@ public class AutoCommand extends SequentialCommandGroup{
         drivetrain.setBrakeMode();
         drivetrain.resetOdometry(trajectoryStates.get(0).getPose());
 
-        // int lastIndex = 0;
-        // int waypointIndex = 0;
-        // //int markerIndex = 0;
-        // for(int i = 0; i < trajectoryStates.size(); i++) {
-        //     Trajectory.State state = trajectoryStates.get(i);
-        //     Waypoint waypoint = waypoints.get(waypointIndex);
+        int lastIndex = 0;
+        int waypointIndex = 0;
+        int markerIndex = 0;
+        for(int i = 0; i < trajectoryStates.size(); i++) {
+            Trajectory.State state = trajectoryStates.get(i);
+            Waypoint waypoint = waypoints.get(waypointIndex);
         //     //Marker marker = markers.get(markerIndex);
 
         //     // if(state.getPose().getX() == marker.anchorPoint.get("x") && 
@@ -57,21 +58,20 @@ public class AutoCommand extends SequentialCommandGroup{
         //     //    for(String s : marker.names)
         //     // } 
 
-        //     if(state.getPose().getX() == waypoint.anchorPoint.get("x") && 
-        //        state.getPose().getY() == waypoint.anchorPoint.get("y") && waypoint.isStopPoint) {
-        //         if(i != lastIndex) {
-        //             addCommands(new FollowTrajectoryCommand(container, new Trajectory(trajectoryStates.subList(lastIndex, i))));
-        //         }
+            if(state.getPose().getX() == waypoint.anchorPoint.get("x") && 
+               state.getPose().getY() == waypoint.anchorPoint.get("y") && waypoint.isStopPoint) {
+                if(i != lastIndex) {
+                    addCommands(new FollowTrajectoryCommand(container, new Trajectory(trajectoryStates.subList(lastIndex, i))));
+                    lastIndex = i;
+                }
                 
-        //         //addCommands(CommandUtil.getCommand(container, waypoint.stopEvent));
+                addCommands(CommandUtil.getCommand(container, waypoint.stopEvent));
 
-        //         waypointIndex++;
-        //     }
-        // }
+                waypointIndex++;
+            }
+        }
 
-        SmartDashboard.putNumber("SIZE", trajectoryStates.subList(0, trajectoryStates.size()).size());
-
-        addCommands(new FollowTrajectoryCommand(container, new Trajectory(trajectoryStates.subList(0, trajectoryStates.size()))));
+        if(lastIndex != trajectoryStates.size()) addCommands(new FollowTrajectoryCommand(container, new Trajectory(trajectoryStates.subList(0, trajectoryStates.size()))));
     }
 
     public void readTrajectories() {

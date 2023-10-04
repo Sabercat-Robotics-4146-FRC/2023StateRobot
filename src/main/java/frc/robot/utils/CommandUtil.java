@@ -1,6 +1,7 @@
 package frc.robot.utils;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.autos.AutoCommand;
 import frc.robot.autos.Marker;
@@ -8,6 +9,6 @@ import frc.robot.autos.StopEvent;
 
 public class CommandUtil {
     public static Command getCommand(RobotContainer container, StopEvent stopEvent) {
-        return new AutoCommand(container);
+        return new WaitCommand(5);
     }
 }
