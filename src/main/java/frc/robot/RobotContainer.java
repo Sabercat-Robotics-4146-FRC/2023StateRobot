@@ -54,7 +54,7 @@ public class RobotContainer {
     }
  
     public Command getAutonomousCommand() {
-        return CommandUtil.getInstance().getCommand(this, "AutoCommand");
+        return CommandUtil.getInstance().getCommand(this, "frc.robot.autos.AutoCommand");
     }
 
     public DrivetrainSubsystem getDrivetrainSubsystem() {

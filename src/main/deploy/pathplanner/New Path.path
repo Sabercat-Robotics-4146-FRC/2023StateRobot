@@ -24,6 +24,33 @@
     },
     {
       "anchorPoint": {
+        "x": 1.7595340647803912,
+        "y": 3.499655362173942
+      },
+      "prevControl": {
+        "x": 1.6146619678072816,
+        "y": 3.493974103469114
+      },
+      "nextControl": {
+        "x": 1.9044061617535009,
+        "y": 3.5053366208787704
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "frc.robots.commands.other.WaitCommand2"
+        ],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
         "x": 3.0,
         "y": 3.45
       },

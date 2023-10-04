@@ -18,7 +18,7 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.utils.CommandUtil;
 
-public class AutoCommand extends SequentialCommandGroup{    
+public class AutoCommand extends SequentialCommandGroup {    
     DrivetrainSubsystem drivetrain;
 
     List<Trajectory.State> trajectoryStates;
@@ -42,16 +42,18 @@ public class AutoCommand extends SequentialCommandGroup{
         drivetrain.setBrakeMode();
         drivetrain.resetOdometry(trajectoryStates.get(0).getPose());
 
+        SmartDashboard.putBoolean("test 2", true);
+
         int lastIndex = 0;
         int waypointIndex = 0;
         int markerIndex = 0;
         for(int i = 0; i < trajectoryStates.size(); i++) {
             Trajectory.State state = trajectoryStates.get(i);
             Waypoint waypoint = waypoints.get(waypointIndex);
-            Marker marker = markers.get(markerIndex);
+            //Marker marker = markers.get(markerIndex);
 
-            if(state.getPose().getX() == waypoint.anchorPoint.get("x") && 
-               state.getPose().getY() == waypoint.anchorPoint.get("y") && waypoint.isStopPoint) {
+            if(i == trajectoryStates.size()-1 || (state.getPose().getX() == waypoint.anchorPoint.get("x") && 
+               state.getPose().getY() == waypoint.anchorPoint.get("y") && waypoint.isStopPoint)) {
 
                 if(i != lastIndex) {
                     addCommands(new FollowTrajectoryCommand(container, new Trajectory(trajectoryStates.subList(lastIndex, i))));
@@ -59,11 +61,11 @@ public class AutoCommand extends SequentialCommandGroup{
                 }
 
                 List<String> names = waypoint.stopEvent.names;
+                SmartDashboard.putString("String", waypoint.stopEvent.executionBehavior);
+
                 for(String s: names) {
                     addCommands(CommandUtil.getInstance().getCommand(container, s));
                 }
-
-                waypointIndex++;
             }
         }
     }

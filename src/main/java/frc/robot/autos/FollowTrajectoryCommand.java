@@ -49,7 +49,7 @@ public class FollowTrajectoryCommand extends CommandBase {
         lastPosition = curPosition;
         lastState = desiredState;
 
-        SmartDashboard.putNumber("TEST X", desiredTranslation.getX());
+        SmartDashboard.putNumber("TEST", desiredTranslation.getX());
 
         drivetrain.drive(desiredTranslation, 0, true);
     } 
