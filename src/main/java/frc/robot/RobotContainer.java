@@ -9,10 +9,10 @@ import frc.robot.autos.AutoCommand;
 import frc.robot.commands.defaults.*;
 import frc.robot.subsystems.*;
 import frc.robot.utils.Axis;
+import frc.robot.utils.CommandUtil;
 
 
 public class RobotContainer {
-
     public final CommandXboxController primaryController = new CommandXboxController(0);
     public final CommandXboxController secondaryController = new CommandXboxController(1);
 
@@ -54,7 +54,7 @@ public class RobotContainer {
     }
  
     public Command getAutonomousCommand() {
-        return getCommand("AutoCommand");
+        return CommandUtil.getInstance().getCommand(this, "AutoCommand");
     }
 
     public DrivetrainSubsystem getDrivetrainSubsystem() {
@@ -67,13 +67,5 @@ public class RobotContainer {
 
     public ClawSubsystem getClawSubsystem() { 
         return clawSubsystem;
-    }
-
-    // add all non-default commands to this. I may make this a map instead...
-    public Command getCommand(String command) {
-        switch(command) {
-            case "AutoCommand": return new AutoCommand(this);
-            default: return new InstantCommand();
-        }
     }
 }
