@@ -12,10 +12,10 @@ import frc.robot.RobotContainer;
 public class CommandUtil {
     private static CommandUtil instance;
     public static synchronized CommandUtil getInstance() {
-    if (instance == null) {
+      if (instance == null) {
         instance = new CommandUtil();
-    }
-        return instance;
+      }
+      return instance;
     }
     
     public Command getCommand(RobotContainer container, String str) {

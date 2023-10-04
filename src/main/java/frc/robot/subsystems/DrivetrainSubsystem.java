@@ -153,7 +153,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private void update(HolonomicDriveSignal driveSignal) {
         if (driveFlag) {
             Rotation2d rotOffset =
-                (driveSignal.isFieldOriented())
+                (fieldOriented)
                     ? Rotation2d.fromDegrees(gyroscope.getAngle())
                     : Rotation2d.fromDegrees(0);
 
