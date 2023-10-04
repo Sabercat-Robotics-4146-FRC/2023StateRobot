@@ -61,7 +61,7 @@ public final class Constants {
 
 
         public static final double maxSpeed = 5; 
-        public static final double maxAngularVelocity = 5.0; 
+        public static final double maxAngularVelocity = 4.0; 
 
 
         public static final NeutralMode angleNeutralMode = NeutralMode.Brake;
@@ -153,8 +153,8 @@ public final class Constants {
         public static final int RETRACTION_LIMIT_CHANNEL = 9;
         public static final int EXTENSION_LIMIT_CHANNEL = 1;
 
-        public static final double ROTATION_MAX_VELOCITY = 0.05; // in rotations per second (FINAL)
-        public static final double EXTENSION_MAX_VELOCITY = 0.75; // in meters per second
+        public static final double ROTATION_MAX_VELOCITY = 0.25; // in rotations per second (FINAL)
+        public static final double EXTENSION_MAX_VELOCITY = 0.25; // in meters per second
 
         
     }
@@ -166,5 +166,7 @@ public final class Constants {
         public static final double HIGH_VOLTAGE = 6.0;
         public static final double LOW_VOLTAGE = 0.6;
         public static final double CURRENT_LIMIT = 20.0;
+
+        public static final double MIN_RUNTIME = 0.3;
       }
 }

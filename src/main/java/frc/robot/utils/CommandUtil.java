@@ -1,14 +1,33 @@
 package frc.robot.utils;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
-import frc.robot.autos.AutoCommand;
-import frc.robot.autos.Marker;
-import frc.robot.autos.StopEvent;
 
 public class CommandUtil {
-    public static Command getCommand(RobotContainer container, StopEvent stopEvent) {
-        return new WaitCommand(5);
+    private static CommandUtil instance;
+    public static synchronized CommandUtil getInstance() {
+      if (instance == null) {
+        instance = new CommandUtil();
+      }
+      return instance;
+    }
+    
+    public Command getCommand(RobotContainer container, String str) {
+        Command command = null;
+        try {
+            Class<?> c = Class.forName(str);
+            command = (Command) c.getDeclaredConstructor(RobotContainer.class).newInstance(container);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return command;
     }
 }

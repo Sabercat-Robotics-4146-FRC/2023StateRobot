@@ -70,9 +70,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         lastPigeonAngle = gyroscope.getAngle();
 
-        Shuffleboard.getTab("drift").addNumber("gyro", () -> gyroscope.getAngle());
-        Shuffleboard.getTab("drift").addNumber("last angle", () -> lastPigeonAngle);
-
     }
 
     /**
@@ -123,7 +120,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public void resetModules(){
-        for(SwerveModule mod : swerveModules){ mod.resetToAbsolute();}
+        for(SwerveModule mod : swerveModules) {mod.resetToAbsolute();}
     }
 
     public SwerveModuleState[] getModuleStates(){

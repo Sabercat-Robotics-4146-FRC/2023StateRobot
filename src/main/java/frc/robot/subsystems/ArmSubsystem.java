@@ -6,6 +6,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
@@ -13,7 +16,14 @@ import frc.robot.Constants.ArmConstants;
 public class ArmSubsystem extends SubsystemBase {
     public TalonFX rotationMotorLeft, rotationMotorRight, extensionMotor;
     public AnalogPotentiometer potentiometer;
-    public DigitalInput extLimit, retLimit;
+    public DigitalInput extLimitSwitch, retLimitSwitch;
+
+    public double extLimit = Integer.MIN_VALUE;
+    public double retLimit = Integer.MAX_VALUE;
+
+    private Timer timer;
+
+    private double ZERO;
 
     public ArmSubsystem() {
         rotationMotorLeft = new TalonFX(ArmConstants.ROTATION_LEFT_ID);
@@ -36,10 +46,20 @@ public class ArmSubsystem extends SubsystemBase {
         extensionMotor.config_kI(0, 0, 30);
         extensionMotor.config_kD(0, 0, 30);
 
-        potentiometer = new AnalogPotentiometer(ArmConstants.ROTATION_POT_CHANNEL);
+        //potentiometer = new AnalogPotentiometer(ArmConstants.ROTATION_POT_CHANNEL);
 
-        extLimit = new DigitalInput(ArmConstants.EXTENSION_LIMIT_CHANNEL);
-        retLimit = new DigitalInput(ArmConstants.RETRACTION_LIMIT_CHANNEL);
+        extLimitSwitch = new DigitalInput(ArmConstants.EXTENSION_LIMIT_CHANNEL);
+        retLimitSwitch = new DigitalInput(ArmConstants.RETRACTION_LIMIT_CHANNEL);
+
+        ZERO = rotationMotorLeft.getSelectedSensorPosition(0);
+
+        timer = new Timer();
+
+        ShuffleboardTab tab = Shuffleboard.getTab("Claw");
+
+        tab.addNumber("Position", () -> extensionMotor.getSelectedSensorPosition(0));
+        tab.addNumber("Extension limit", () -> extLimit);
+        tab.addNumber("Retraction Limit", () -> retLimit);
     }
 
     /**
@@ -60,10 +80,10 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setExtensionVelocity(double ms) {
-        if((extLimit.get() && ms > 0) || (retLimit.get() && ms < 0)) {
-            extensionMotor.set(ControlMode.Velocity, 0);
-            return;
-        }
+        double pos = extensionMotor.getSelectedSensorPosition(0);
+        // set the limits
+        if(extLimitSwitch.get()) extLimit = pos;
+        if(retLimitSwitch.get()) retLimit = pos;
 
         // convert to units/100ms from meters/second
         // steps per rotation: 2048
@@ -72,13 +92,23 @@ public class ArmSubsystem extends SubsystemBase {
 
         double rv = 15 * ((ms / (.040 * Math.PI)) * 2048) / 10;
 
-        extensionMotor.set(ControlMode.Velocity, rv);
+        if(((pos-extLimit < 1000 || pos < extLimit) && ms < 0) || ((retLimit-pos < 1000 || pos > retLimit) && ms > 0)) {
+            rv = 0;
+        }
+
+        extensionMotor.set(ControlMode.Velocity, rv == 0 ? timer.hasElapsed(2000) ? -0.05 : 0 : rv);
         SmartDashboard.putNumber("Extension Velocity", extensionMotor.getSelectedSensorVelocity(0));
         SmartDashboard.putNumber("Target EV", rv);
+        SmartDashboard.putNumber("Position", pos);
 
     }
 
-    public void setRotationPosition() {
+    public void setRotationPosition(double pos) {
+        rotationMotorLeft.set(ControlMode.Position, pos + ZERO);
+        rotationMotorRight.set(ControlMode.Position, pos + ZERO);
+    }
 
+    public void setExtensionPosition(double pos) {
+        extensionMotor.set(ControlMode.Position, pos + retLimit);
     }
 }
