@@ -22,8 +22,8 @@ public class RobotContainer {
 
     public RobotContainer() {
         CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
-        CommandScheduler.getInstance().registerSubsystem(armSubsystem);
-        CommandScheduler.getInstance().registerSubsystem(clawSubsystem);
+        // CommandScheduler.getInstance().registerSubsystem(armSubsystem);
+        // CommandScheduler.getInstance().registerSubsystem(clawSubsystem);
 
 
         drivetrainSubsystem.setDefaultCommand(
@@ -64,9 +64,5 @@ public class RobotContainer {
     public ArmSubsystem getArmSubsystem() {
         // return this.armSubsystem;
         return null;
-    }
-
-    public ClawSubsystem getClawSubsystem() { 
-        return clawSubsystem;
     }
 }

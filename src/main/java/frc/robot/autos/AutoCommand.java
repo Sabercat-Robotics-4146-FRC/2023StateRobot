@@ -48,30 +48,24 @@ public class AutoCommand extends SequentialCommandGroup{
         for(int i = 0; i < trajectoryStates.size(); i++) {
             Trajectory.State state = trajectoryStates.get(i);
             Waypoint waypoint = waypoints.get(waypointIndex);
-        //     //Marker marker = markers.get(markerIndex);
-
-        //     // if(state.getPose().getX() == marker.anchorPoint.get("x") && 
-        //     //    state.getPose().getY() == waypoint.anchorPoint.get("y")) {
-
-            
-
-        //     //    for(String s : marker.names)
-        //     // } 
+            Marker marker = markers.get(markerIndex);
 
             if(state.getPose().getX() == waypoint.anchorPoint.get("x") && 
                state.getPose().getY() == waypoint.anchorPoint.get("y") && waypoint.isStopPoint) {
+
                 if(i != lastIndex) {
                     addCommands(new FollowTrajectoryCommand(container, new Trajectory(trajectoryStates.subList(lastIndex, i))));
                     lastIndex = i;
                 }
-                
-                addCommands(CommandUtil.getCommand(container, waypoint.stopEvent));
+
+                List<String> names = waypoint.stopEvent.names;
+                for(String s: names) {
+                    addCommands(CommandUtil.getInstance().getCommand(container, s));
+                }
 
                 waypointIndex++;
             }
         }
-
-        if(lastIndex != trajectoryStates.size()) addCommands(new FollowTrajectoryCommand(container, new Trajectory(trajectoryStates.subList(0, trajectoryStates.size()))));
     }
 
     public void readTrajectories() {
