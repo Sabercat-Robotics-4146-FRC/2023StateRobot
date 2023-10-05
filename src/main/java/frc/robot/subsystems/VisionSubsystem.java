@@ -6,10 +6,10 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants.LimelightConstants;
 
-public class Vision implements Subsystem {
+public class VisionSubsystem implements Subsystem {
   public static NetworkTable mLime;
 
-  public Vision() {
+  public VisionSubsystem() {
     mLime = NetworkTableInstance.getDefault().getTable("limelight");
 
     Shuffleboard.getTab("Vision").addNumber("April Tag ID", () -> getAprilTagID());
