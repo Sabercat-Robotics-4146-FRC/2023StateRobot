@@ -25,6 +25,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     private double ZERO;
 
+    private double setpoint;
+
     public ArmSubsystem() {
         rotationMotorLeft = new TalonFX(ArmConstants.ROTATION_LEFT_ID);
         rotationMotorRight = new TalonFX(ArmConstants.ROTATION_RIGHT_ID);
@@ -45,6 +47,13 @@ public class ArmSubsystem extends SubsystemBase {
         extensionMotor.config_kP(0, 0, 30);
         extensionMotor.config_kI(0, 0, 30);
         extensionMotor.config_kD(0, 0, 30);
+
+        extensionMotor.config_kF(1, 0, 30);
+        extensionMotor.config_kP(1, .125, 30);
+        extensionMotor.config_kI(1, 0, 30);
+        extensionMotor.config_kD(1, 0, 30);
+
+        setpoint = 0;
 
         //potentiometer = new AnalogPotentiometer(ArmConstants.ROTATION_POT_CHANNEL);
 
@@ -96,6 +105,7 @@ public class ArmSubsystem extends SubsystemBase {
             rv = 0;
         }
 
+        extensionMotor.selectProfileSlot(0, 0);
         extensionMotor.set(ControlMode.Velocity, rv == 0 ? timer.hasElapsed(2000) ? -0.05 : 0 : rv);
         SmartDashboard.putNumber("Extension Velocity", extensionMotor.getSelectedSensorVelocity(0));
         SmartDashboard.putNumber("Target EV", rv);
@@ -108,6 +118,22 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setExtensionPosition(double pos) {
-        extensionMotor.set(ControlMode.Position, pos + retLimit);
+        extensionMotor.selectProfileSlot(1, 0);
+        extensionMotor.set(ControlMode.Position, retLimit-pos);
+        SmartDashboard.putNumber("test", extensionMotor.getClosedLoopError());
+        
+    }
+
+    public double getSetpoint() {
+        return setpoint;
+    }
+
+    public void setSetpoint(double s) {
+        this.setpoint = retLimit - s;
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putData(this);
     }
 }
