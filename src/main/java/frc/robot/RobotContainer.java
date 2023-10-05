@@ -56,8 +56,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         primaryController.a().onTrue(Commands.runOnce(drivetrainSubsystem::toggleFieldOriented));
         primaryController.start().onTrue(Commands.runOnce(drivetrainSubsystem.gyroscope::reset));
-        secondaryController.b().onTrue(Commands.runOnce(clawSubsystem::toggleClaw));
-        secondaryController.a().onTrue(new SetArmPositionCommand(this));
+        secondaryController.b().onTrue(new SetArmPositionCommand(this));
     }
  
     public Command getAutonomousCommand() {
