@@ -120,7 +120,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public void resetModules(){
-        for(SwerveModule mod : swerveModules){ mod.resetToAbsolute();}
+        for(SwerveModule mod : swerveModules) {mod.resetToAbsolute();}
     }
 
     public SwerveModuleState[] getModuleStates(){
