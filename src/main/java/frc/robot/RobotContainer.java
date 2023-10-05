@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.defaults.*;
 import frc.robot.shuffleboard.DriverReadout;
+import frc.robot.commands.other.SetArmPositionCommand;
 import frc.robot.subsystems.*;
 import frc.robot.utils.Axis;
 import frc.robot.utils.CommandUtil;
@@ -45,6 +46,13 @@ public class RobotContainer {
             )
         );
 
+        clawSubsystem.setDefaultCommand(
+            new ClawCommand(
+                clawSubsystem,
+                secondaryController.getHID()
+            )
+        );
+
         configureButtonBindings();
     }
 
@@ -54,6 +62,7 @@ public class RobotContainer {
         secondaryController.b().onTrue(Commands.runOnce(clawSubsystem::toggleClaw));
         secondaryController.povUp().onTrue(Commands.runOnce(() -> driverReadout.setArmPosition(-1)));
         secondaryController.povDown().onTrue(Commands.runOnce(() -> driverReadout.setArmPosition(1)));
+        secondaryController.a().onTrue(new SetArmPositionCommand(this));
     }
  
     public Command getAutonomousCommand() {
