@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.defaults.*;
+import frc.robot.shuffleboard.DriverReadout;
 import frc.robot.commands.other.SetArmPositionCommand;
 import frc.robot.subsystems.*;
 import frc.robot.utils.Axis;
@@ -18,6 +19,8 @@ public class RobotContainer {
     private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
     private final ArmSubsystem armSubsystem = new ArmSubsystem();
     private final ClawSubsystem clawSubsystem = new ClawSubsystem();
+
+    private final DriverReadout driverReadout = new DriverReadout();
 
     public RobotContainer() {
         CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
@@ -36,7 +39,7 @@ public class RobotContainer {
 
         armSubsystem.setDefaultCommand(
             new ArmCommand(
-                armSubsystem,
+                this,
                 new Axis(() -> secondaryController.getRightTriggerAxis()),
                 new Axis(() -> secondaryController.getLeftTriggerAxis()),
                 new Axis(() -> secondaryController.getRightY())
@@ -56,7 +59,10 @@ public class RobotContainer {
     private void configureButtonBindings() {
         primaryController.a().onTrue(Commands.runOnce(drivetrainSubsystem::toggleFieldOriented));
         primaryController.start().onTrue(Commands.runOnce(drivetrainSubsystem.gyroscope::reset));
-        secondaryController.b().onTrue(new SetArmPositionCommand(this));
+        secondaryController.b().onTrue(Commands.runOnce(clawSubsystem::toggleClaw));
+        secondaryController.povUp().onTrue(Commands.runOnce(() -> driverReadout.setArmPosition(-1)));
+        secondaryController.povDown().onTrue(Commands.runOnce(() -> driverReadout.setArmPosition(1)));
+        secondaryController.a().onTrue(new SetArmPositionCommand(this));
     }
  
     public Command getAutonomousCommand() {
@@ -73,5 +79,9 @@ public class RobotContainer {
 
     public ClawSubsystem getClawSubsystem() { 
         return clawSubsystem;
+    }
+
+    public DriverReadout getDriverReadout() {
+        return driverReadout;
     }
 }

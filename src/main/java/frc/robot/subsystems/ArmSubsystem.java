@@ -110,7 +110,6 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Extension Velocity", extensionMotor.getSelectedSensorVelocity(0));
         SmartDashboard.putNumber("Target EV", rv);
         SmartDashboard.putNumber("Position", pos);
-
     }
 
     public void setRotationPosition(double pos) {
