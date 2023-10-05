@@ -163,7 +163,7 @@ public final class Constants {
         public static final int CLAW_ID = 24;
         public static final int CLAW_POT_CHANNEL = 1;
     
-        public static final double HIGH_VOLTAGE = 6.0;
+        public static final double HIGH_VOLTAGE = 6;
         public static final double LOW_VOLTAGE = 0.6;
         public static final double CURRENT_LIMIT = 20.0;
 
