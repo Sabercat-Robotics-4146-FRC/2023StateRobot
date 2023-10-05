@@ -12,5 +12,5 @@ public class Waypoint {
     @Expose
     public boolean isStopPoint;
     @Expose 
-    public Map<String, stopEvent;
+    public StopEvent stopEvent;
 }

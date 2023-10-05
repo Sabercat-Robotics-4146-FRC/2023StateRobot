@@ -42,8 +42,6 @@ public class AutoCommand extends SequentialCommandGroup {
         drivetrain.setBrakeMode();
         drivetrain.resetOdometry(trajectoryStates.get(0).getPose());
 
-        SmartDashboard.putBoolean("test 2", true);
-
         int lastIndex = 0;
         int waypointIndex = 0;
         int markerIndex = 0;
@@ -53,19 +51,19 @@ public class AutoCommand extends SequentialCommandGroup {
             //Marker marker = markers.get(markerIndex);
 
             if(i == trajectoryStates.size()-1 || (state.getPose().getX() == waypoint.anchorPoint.get("x") && 
-               state.getPose().getY() == waypoint.anchorPoint.get("y") && waypoint.isStopPoint)) {
+               state.getPose().getY() == waypoint.anchorPoint.get("y"))) {
 
-                if(i != lastIndex) {
-                    addCommands(new FollowTrajectoryCommand(container, new Trajectory(trajectoryStates.subList(lastIndex, i))));
+                if(waypoint.isStopPoint) {
+                    if(i != lastIndex) addCommands(new FollowTrajectoryCommand(container, new Trajectory(trajectoryStates.subList(lastIndex, i))));
+
                     lastIndex = i;
-                }
+                    List<String> names = waypoint.stopEvent.names;
 
-                List<String> names = waypoint.stopEvent.names;
-                SmartDashboard.putString("String", waypoint.stopEvent.executionBehavior);
-
-                for(String s: names) {
-                    addCommands(CommandUtil.getInstance().getCommand(container, s));
+                    for(String s: names) {
+                        addCommands(CommandUtil.getInstance().getCommand(container, s));
+                    }
                 }
+                waypointIndex++;
             }
         }
     }
