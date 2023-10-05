@@ -70,9 +70,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         lastPigeonAngle = gyroscope.getAngle();
 
-        Shuffleboard.getTab("drift").addNumber("gyro", () -> gyroscope.getAngle());
-        Shuffleboard.getTab("drift").addNumber("last angle", () -> lastPigeonAngle);
-
     }
 
     /**
