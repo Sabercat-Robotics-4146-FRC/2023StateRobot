@@ -38,7 +38,7 @@ public class RobotContainer {
 
         armSubsystem.setDefaultCommand(
             new ArmCommand(
-                armSubsystem,
+                this,
                 new Axis(() -> secondaryController.getRightTriggerAxis()),
                 new Axis(() -> secondaryController.getLeftTriggerAxis()),
                 new Axis(() -> secondaryController.getRightY())
@@ -52,6 +52,8 @@ public class RobotContainer {
         primaryController.a().onTrue(Commands.runOnce(drivetrainSubsystem::toggleFieldOriented));
         primaryController.start().onTrue(Commands.runOnce(drivetrainSubsystem.gyroscope::reset));
         secondaryController.b().onTrue(Commands.runOnce(clawSubsystem::toggleClaw));
+        secondaryController.povUp().onTrue(Commands.runOnce(() -> driverReadout.setArmPosition(-1)));
+        secondaryController.povDown().onTrue(Commands.runOnce(() -> driverReadout.setArmPosition(1)));
     }
  
     public Command getAutonomousCommand() {

@@ -12,6 +12,10 @@ public class DriverReadout {
 
     GenericEntry armPosition;
 
+    private int selected;
+
+    private String[] options;
+
     public DriverReadout() {
         tab = Shuffleboard.getTab("Main");
         
@@ -20,14 +24,18 @@ public class DriverReadout {
             .withSize(2, 2)
             .getEntry();
 
-        armPosition.setString("Top");
+        selected = 0;
+        options = (String[]) ArmConstants.ARM_POSITIONS.keySet().toArray();
+
+        armPosition.setString(options[selected]);
     }
     
     public ArmPositionConstants getSelectedArmPosition() {
-        return ArmConstants.ARM_POSITIONS.get(armPosition.getString("Top"));
+        return ArmConstants.ARM_POSITIONS.get(armPosition.getString(options[selected]));
     }
 
-    public void setArmPosition(String str) {
-        armPosition.setString(str);
+    public void setArmPosition(int dir) {
+        selected = Math.max(0, Math.min(selected+dir, 2));
+        armPosition.setString(options[selected]);
     }
 }
