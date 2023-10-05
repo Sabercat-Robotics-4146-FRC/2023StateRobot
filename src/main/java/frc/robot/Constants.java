@@ -171,7 +171,7 @@ public final class Constants {
         // fill in values
         public static final Map<String, ArmPositionConstants> ARM_POSITIONS = Map.of(
             "Top", new ArmPositionConstants(0, 0),
-            "Middle", new ArmPositionConstants(0,0),
+            "Middle", new ArmPositionConstants(0,6000),
             "Bottom", new ArmPositionConstants(0, 0)
         );
     }

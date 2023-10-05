@@ -10,32 +10,25 @@ import frc.robot.Constants.ArmConstants.ArmPositionConstants;
 public class DriverReadout {
     ShuffleboardTab tab;
 
-    GenericEntry armPosition;
-
     private int selected;
 
     private String[] options;
 
     public DriverReadout() {
         tab = Shuffleboard.getTab("Main");
-        
-        armPosition = tab.add("Test", false) 
-            .withWidget(BuiltInWidgets.kTextView)
-            .withSize(2, 2)
-            .getEntry();
 
         selected = 0;
-        options = (String[]) ArmConstants.ARM_POSITIONS.keySet().toArray();
 
-        armPosition.setString(options[selected]);
+        options = new String[]{"Top","Middle","Bottom"};
+
+       tab.addString("Test", () -> options[selected]);
     }
     
     public ArmPositionConstants getSelectedArmPosition() {
-        return ArmConstants.ARM_POSITIONS.get(armPosition.getString(options[selected]));
+        return ArmConstants.ARM_POSITIONS.get(options[selected]);
     }
 
     public void setArmPosition(int dir) {
         selected = Math.max(0, Math.min(selected+dir, 2));
-        armPosition.setString(options[selected]);
     }
 }
