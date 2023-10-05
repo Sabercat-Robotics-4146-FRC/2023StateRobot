@@ -43,6 +43,13 @@ public class RobotContainer {
             )
         );
 
+        clawSubsystem.setDefaultCommand(
+            new ClawCommand(
+                clawSubsystem,
+                secondaryController.getHID()
+            )
+        );
+
         configureButtonBindings();
     }
 
