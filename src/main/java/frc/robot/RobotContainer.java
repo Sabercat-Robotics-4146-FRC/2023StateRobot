@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.defaults.*;
+import frc.robot.commands.other.SetArmPositionCommand;
 import frc.robot.subsystems.*;
 import frc.robot.utils.Axis;
 import frc.robot.utils.CommandUtil;
@@ -49,6 +50,7 @@ public class RobotContainer {
         primaryController.a().onTrue(Commands.runOnce(drivetrainSubsystem::toggleFieldOriented));
         primaryController.start().onTrue(Commands.runOnce(drivetrainSubsystem.gyroscope::reset));
         secondaryController.b().onTrue(Commands.runOnce(clawSubsystem::toggleClaw));
+        secondaryController.a().onTrue(new SetArmPositionCommand(this));
     }
  
     public Command getAutonomousCommand() {
