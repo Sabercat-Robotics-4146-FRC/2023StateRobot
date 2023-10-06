@@ -43,7 +43,7 @@ public class AutoCommand extends SequentialCommandGroup {
 
         int lastIndex = 0;
         int waypointIndex = 0;
-        int markerIndex = 0;
+        // int markerIndex = 0;
         for(int i = 0; i < trajectoryStates.size(); i++) {
             Trajectory.State state = trajectoryStates.get(i);
             Waypoint waypoint = waypoints.get(waypointIndex);
