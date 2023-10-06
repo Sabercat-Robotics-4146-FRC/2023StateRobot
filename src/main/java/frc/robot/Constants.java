@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.Map;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -144,6 +146,16 @@ public final class Constants {
     }
 
     public static class ArmConstants {
+        public static class ArmPositionConstants {
+            public static double ROTATION_POSITION;
+            public static double EXTENSION_POSITION;
+
+            public ArmPositionConstants(double r, double e) {
+                ROTATION_POSITION = r;
+                EXTENSION_POSITION = e;
+            }
+        }
+
         public static final int ROTATION_LEFT_ID = 21; // update
         public static final int ROTATION_RIGHT_ID = 22; // update
         public static final int ROTATION_POT_CHANNEL = 0;
@@ -156,14 +168,19 @@ public final class Constants {
         public static final double ROTATION_MAX_VELOCITY = 0.25; // in rotations per second (FINAL)
         public static final double EXTENSION_MAX_VELOCITY = 0.25; // in meters per second
 
-        
+        // fill in values
+        public static final Map<String, ArmPositionConstants> ARM_POSITIONS = Map.of(
+            "Top", new ArmPositionConstants(0, 0),
+            "Middle", new ArmPositionConstants(0,6000),
+            "Bottom", new ArmPositionConstants(0, 0)
+        );
     }
 
     public static class ClawConstants {
         public static final int CLAW_ID = 24;
         public static final int CLAW_POT_CHANNEL = 1;
     
-        public static final double HIGH_VOLTAGE = 6.0;
+        public static final double HIGH_VOLTAGE = 6;
         public static final double LOW_VOLTAGE = 0.6;
         public static final double CURRENT_LIMIT = 20.0;
 

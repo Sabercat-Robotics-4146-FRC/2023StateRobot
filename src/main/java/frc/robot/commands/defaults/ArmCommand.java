@@ -1,16 +1,19 @@
 package frc.robot.commands.defaults;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.utils.Axis;
 
 public class ArmCommand extends CommandBase {
+    RobotContainer container;
     ArmSubsystem armSubsystem;
     Axis extension, retraction, rotationAxis;
 
-    public ArmCommand(ArmSubsystem armSubsystem, Axis extension, Axis retraction, Axis rotationAxis) {
-        this.armSubsystem = armSubsystem;
+    public ArmCommand(RobotContainer container, Axis extension, Axis retraction, Axis rotationAxis) {
+        this.container = container;
+        armSubsystem = container.getArmSubsystem();
         this.extension = extension;
         this.retraction = retraction;
         this.rotationAxis = rotationAxis;
@@ -36,5 +39,7 @@ public class ArmCommand extends CommandBase {
         } else {
             armSubsystem.setExtensionVelocity(0);
         }
+
+
     }
 }
