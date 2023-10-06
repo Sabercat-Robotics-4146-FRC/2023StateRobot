@@ -3,10 +3,11 @@ package frc.robot.autos;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.math.trajectory.Trajectory;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
-public class FollowTrajectoryCommand extends CommandBase {
+public class FollowWPILIBTrajectoryCommand extends CommandBase {
     Translation2d lastPosition;
     Trajectory.State lastState;
     Trajectory trajectory;
@@ -15,7 +16,7 @@ public class FollowTrajectoryCommand extends CommandBase {
 
     Timer timer;
     
-    public FollowTrajectoryCommand(RobotContainer container, Trajectory trajectory) {
+    public FollowWPILIBTrajectoryCommand(RobotContainer container, Trajectory trajectory) {
         this.trajectory = trajectory;
         this.drivetrain = container.getDrivetrainSubsystem();
 
@@ -37,22 +38,22 @@ public class FollowTrajectoryCommand extends CommandBase {
         if(lastState == null) lastState = desiredState;
 
         Translation2d curPosition = new Translation2d(
-            desiredState.getPose().getX(),
-            desiredState.getPose().getY());
+            desiredState.poseMeters.getX(),
+            desiredState.poseMeters.getY());
 
         Translation2d desiredTranslation = new Translation2d(
-            (curPosition.getX() - lastPosition.getX()) / (desiredState.time - lastState.time),
-            (curPosition.getY() - lastPosition.getY()) / (desiredState.time - lastState.time)
+            (curPosition.getX() - lastPosition.getX()) / (desiredState.timeSeconds - lastState.timeSeconds),
+            (curPosition.getY() - lastPosition.getY()) / (desiredState.timeSeconds - lastState.timeSeconds)
         );
 
         lastPosition = curPosition;
         lastState = desiredState;
 
-        drivetrain.drive(desiredTranslation, desiredState.holonomicAngularVelocity * Math.PI / 180, true);
+        drivetrain.drive(desiredTranslation, 0, true);
     } 
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(trajectory.trajectory.get(trajectory.trajectory.size()-1).time);
+        return timer.hasElapsed(trajectory.getTotalTimeSeconds());
     }
 }
