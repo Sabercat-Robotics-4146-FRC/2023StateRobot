@@ -91,7 +91,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, fieldOriented);
 
         rotationFlag = Math.abs(rotationalVelocity) > 0.1;
-        drivingFlag = Math.abs(translationalVelocity.getNorm()) > 0.1;
+        drivingFlag = Math.abs(translationalVelocity.getNorm()) > 0.5;
     } 
     
     // drive correction code
@@ -120,7 +120,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public void resetModules(){
-        for(SwerveModule mod : swerveModules){ mod.resetToAbsolute();}
+        for(SwerveModule mod : swerveModules) {mod.resetToAbsolute();}
     }
 
     public SwerveModuleState[] getModuleStates(){
