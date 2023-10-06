@@ -13,6 +13,7 @@ public class AlignWithApriltag extends CommandBase {
 
     private Translation2d translation;
     private double time;
+    private double id;
 
     private Timer timer;
 
@@ -46,6 +47,6 @@ public class AlignWithApriltag extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(time);
+        return timer.hasElapsed(time) || id == 0 || id == 4 || id == 5; // finish if reached target or invalid ID
     }
 }
