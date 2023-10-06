@@ -19,11 +19,13 @@ public class RobotContainer {
     private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
     private final ArmSubsystem armSubsystem = new ArmSubsystem();
     private final ClawSubsystem clawSubsystem = new ClawSubsystem();
+    private final VisionSubsystem visionSubsystem = new VisionSubsystem();
 
     public RobotContainer() {
         CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
         CommandScheduler.getInstance().registerSubsystem(armSubsystem);
         CommandScheduler.getInstance().registerSubsystem(clawSubsystem);
+        CommandScheduler.getInstance().registerSubsystem(visionSubsystem);
 
 
         drivetrainSubsystem.setDefaultCommand(
@@ -67,6 +69,10 @@ public class RobotContainer {
 
     public ClawSubsystem getClawSubsystem() { 
         return clawSubsystem;
+    }
+
+    public VisionSubsystem getVisionSubsystem() {
+        return visionSubsystem;
     }
 
     // add all non-default commands to this. I may make this a map instead...
