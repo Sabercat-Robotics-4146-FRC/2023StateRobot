@@ -71,14 +71,14 @@ public final class Constants {
 
 
         public static final class FrontLeft {
-            public static final boolean isInverted = false;
+            public static final boolean isInverted = true;
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 3;
             // 144.676208496 2023 COMP BOT
             // 282.85675048828125 - 2.2796630859375 DRIVE BOT
             public static final Rotation2d angleOffset = 
-                Rotation2d.fromDegrees(239.14764404296876 - 180 + 2.8);
+                Rotation2d.fromDegrees(282.85675048828125 - 2.2796630859375);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset, isInverted);
         }
@@ -92,35 +92,35 @@ public final class Constants {
             // -39.298095703125 2023 COMP BOT
             // 142.92938232421875 - 1.92260742187 DRIVE BOT
             public static final Rotation2d angleOffset = 
-                Rotation2d.fromDegrees(100.634765625);
+                Rotation2d.fromDegrees(1142.92938232421875 - 1.92260742187 + 90 - 20 + 4);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset, isInverted);
         }
         
 
         public static final class BackLeft { 
-            public static final boolean isInverted = false;
+            public static final boolean isInverted = true;
             public static final int driveMotorID = 7;
             public static final int angleMotorID = 8;
             public static final int canCoderID = 9;
             // -185.0372314453125 2023 COMP BOT
             // 62.1826171875 - 0.8514404296875 DRIVE BOT
             public static final Rotation2d angleOffset = 
-                Rotation2d.fromDegrees(151.87225341796875);
+                Rotation2d.fromDegrees(62.1826171875 - 0.8514404296875 + 2.8);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset, isInverted);
         }
 
 
         public static final class BackRight { 
-            public static final boolean isInverted = false;
+            public static final boolean isInverted = true;
             public static final int driveMotorID = 10;
             public static final int angleMotorID = 11;
             public static final int canCoderID = 12;
             // 261.419677734375 2023 COMP BOT
             // 161.71875 + 180 - 1.00250244140625 DRIVE BOT
             public static final Rotation2d angleOffset = 
-                Rotation2d.fromDegrees(153.973388671875);
+                Rotation2d.fromDegrees(161.71875 + 180 - 1.00250244140625 -2.74658203125);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset, isInverted);
         }

@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.defaults.*;
 import frc.robot.shuffleboard.DriverReadout;
-import frc.robot.commands.other.SetArmPositionCommand;
 import frc.robot.subsystems.*;
 import frc.robot.utils.Axis;
 import frc.robot.utils.CommandUtil;
@@ -32,27 +31,27 @@ public class RobotContainer {
         drivetrainSubsystem.setDefaultCommand(
             new DriveCommand(
                 drivetrainSubsystem, 
-                new Axis(() -> primaryController.getLeftY(), 2.25),
-                new Axis(() -> primaryController.getLeftX(), 2.25),
+                new Axis(() -> primaryController.getLeftY(), 20.25),
+                new Axis(() -> primaryController.getLeftX(), 20.25),
                 new Axis(() -> primaryController.getRightX(), 1.5)
             )
         );
 
-        armSubsystem.setDefaultCommand(
-            new ArmCommand(
-                this,
-                new Axis(() -> secondaryController.getRightTriggerAxis()),
-                new Axis(() -> secondaryController.getLeftTriggerAxis()),
-                new Axis(() -> secondaryController.getRightY())
-            )
-        );
+        // armSubsystem.setDefaultCommand(
+        //     new ArmCommand(
+        //         this,
+        //         new Axis(() -> secondaryController.getRightTriggerAxis()),
+        //         new Axis(() -> secondaryController.getLeftTriggerAxis()),
+        //         new Axis(() -> secondaryController.getRightY())
+        //     )
+        // );
 
-        clawSubsystem.setDefaultCommand(
-            new ClawCommand(
-                clawSubsystem,
-                secondaryController.getHID()
-            )
-        );
+        // clawSubsystem.setDefaultCommand(
+        //     new ClawCommand(
+        //         clawSubsystem,
+        //         secondaryController.getHID()
+        //     )
+        // );
 
         configureButtonBindings();
     }
@@ -62,11 +61,11 @@ public class RobotContainer {
         primaryController.start().onTrue(Commands.runOnce(drivetrainSubsystem.gyroscope::reset));
         secondaryController.povUp().onTrue(Commands.runOnce(() -> driverReadout.setArmPosition(-1)));
         secondaryController.povDown().onTrue(Commands.runOnce(() -> driverReadout.setArmPosition(1)));
-        secondaryController.b().onTrue(new SetArmPositionCommand(this));
+        //secondaryController.a().onTrue(new SetArmPositionCommand(this));
     }
  
     public Command getAutonomousCommand() {
-        return CommandUtil.getInstance().getCommand(this, "AutoCommand");
+        return CommandUtil.getInstance().getCommand(this, "frc.robot.autos.AutoCommand");
     }
 
     public DrivetrainSubsystem getDrivetrainSubsystem() {
@@ -74,11 +73,8 @@ public class RobotContainer {
     }
 
     public ArmSubsystem getArmSubsystem() {
-        return this.armSubsystem;
-    }
-
-    public ClawSubsystem getClawSubsystem() { 
-        return clawSubsystem;
+        // return this.armSubsystem;
+        return null;
     }
 
     public VisionSubsystem getVisionSubsystem() {
