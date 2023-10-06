@@ -44,11 +44,11 @@ public class VisionSubsystem implements Subsystem {
 
   public double[] getTargetPose() {
     // X, Y, Z, Roll, Pitch, Yaw. The important ones are the first 3
-    return mLime.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
+    return mLime.getEntry("targetpose_cameraspace").getDoubleArray(new double[6]);
   }
 
-  public double[] getRobotPose() {
+  public double[] getCameraPose() {
     // X, Y, Z, Roll, Pitch, Yaw. The important ones are the first 3
-    return mLime.getEntry("robotpose_targetspace").getDoubleArray(new double[6]);
+    return mLime.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
   }
 }
