@@ -1,7 +1,9 @@
 package frc.robot.commands.other;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.ArmConstants.ArmPositionConstants;
 import frc.robot.subsystems.ArmSubsystem;
 
 public class SetArmPositionCommand extends InstantCommand {
@@ -17,9 +19,13 @@ public class SetArmPositionCommand extends InstantCommand {
 
     @Override
     public void execute() {
-        armSubsystem.setSetpoint(6000);
+        ArmPositionConstants constants = container.getDriverReadout().getSelectedArmPosition();
+
+        SmartDashboard.putNumber("test 5", constants.EXTENSION_POSITION);
+
+        armSubsystem.setSetpoint(constants.EXTENSION_POSITION);
         //container.getArmSubsystem().setRotationPosition(0);
-        container.getArmSubsystem().setExtensionPosition(6000);
+        container.getArmSubsystem().setExtensionPosition();
     }
 
     @Override

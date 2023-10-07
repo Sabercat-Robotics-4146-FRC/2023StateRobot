@@ -18,8 +18,8 @@ public class ArmSubsystem extends SubsystemBase {
     public AnalogPotentiometer potentiometer;
     public DigitalInput extLimitSwitch, retLimitSwitch;
 
-    public double extLimit = Integer.MIN_VALUE;
-    public double retLimit = Integer.MAX_VALUE;
+    public double extLimit = -115000;
+    public double retLimit = -7500;
 
     private Timer timer;
 
@@ -49,7 +49,7 @@ public class ArmSubsystem extends SubsystemBase {
         extensionMotor.config_kD(0, 0, 30);
 
         extensionMotor.config_kF(1, 0, 30);
-        extensionMotor.config_kP(1, .125, 30);
+        extensionMotor.config_kP(1, .090, 30);
         extensionMotor.config_kI(1, 0, 30);
         extensionMotor.config_kD(1, 0, 30);
 
@@ -69,6 +69,7 @@ public class ArmSubsystem extends SubsystemBase {
         tab.addNumber("Position", () -> extensionMotor.getSelectedSensorPosition(0));
         tab.addNumber("Extension limit", () -> extLimit);
         tab.addNumber("Retraction Limit", () -> retLimit);
+        tab.addNumber("Arm Rotation Position", () -> rotationMotorLeft.getSelectedSensorPosition());
     }
 
     /**
@@ -117,9 +118,18 @@ public class ArmSubsystem extends SubsystemBase {
         rotationMotorRight.set(ControlMode.Position, pos + ZERO);
     }
 
-    public void setExtensionPosition(double pos) {
+    public void setExtensionPosition() {
+        if(extLimitSwitch.get()) extLimit = extensionMotor.getSelectedSensorPosition();
+        if(retLimitSwitch.get()) retLimit = extensionMotor.getSelectedSensorPosition();
+
+        if(setpoint < extLimit) {
+            setSetpointAbsolute(extLimit);
+        } else if(setpoint > retLimit) {
+            setSetpointAbsolute(retLimit);
+        }
+
         extensionMotor.selectProfileSlot(1, 0);
-        extensionMotor.set(ControlMode.Position, retLimit-pos);
+        extensionMotor.set(ControlMode.Position, setpoint);
         SmartDashboard.putNumber("test", extensionMotor.getClosedLoopError());
         
     }
@@ -130,6 +140,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void setSetpoint(double s) {
         this.setpoint = retLimit - s;
+    }
+
+    public void setSetpointAbsolute(double s) {
+        this.setpoint = s;
     }
 
     @Override

@@ -147,8 +147,8 @@ public final class Constants {
 
     public static class ArmConstants {
         public static class ArmPositionConstants {
-            public static double ROTATION_POSITION;
-            public static double EXTENSION_POSITION;
+            public double ROTATION_POSITION;
+            public double EXTENSION_POSITION;
 
             public ArmPositionConstants(double r, double e) {
                 ROTATION_POSITION = r;
@@ -165,12 +165,12 @@ public final class Constants {
         public static final int RETRACTION_LIMIT_CHANNEL = 9;
         public static final int EXTENSION_LIMIT_CHANNEL = 1;
 
-        public static final double ROTATION_MAX_VELOCITY = 0.25; // in rotations per second (FINAL)
+        public static final double ROTATION_MAX_VELOCITY = 0.15; // in rotations per second (FINAL)
         public static final double EXTENSION_MAX_VELOCITY = 0.25; // in meters per second
 
         // fill in values
         public static final Map<String, ArmPositionConstants> ARM_POSITIONS = Map.of(
-            "Top", new ArmPositionConstants(0, 0),
+            "Top", new ArmPositionConstants(0, 103500),
             "Middle", new ArmPositionConstants(0,6000),
             "Bottom", new ArmPositionConstants(0, 0)
         );
