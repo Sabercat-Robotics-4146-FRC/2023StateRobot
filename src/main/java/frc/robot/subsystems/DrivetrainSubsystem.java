@@ -92,6 +92,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
         rotationFlag = Math.abs(rotationalVelocity) > 0.1;
         drivingFlag = Math.abs(translationalVelocity.getNorm()) > 0.5;
     } 
+
+    public void zeroDrive() {
+        drive(new Translation2d(0,0), 0, true);
+    }
     
     // drive correction code
     public SwerveModuleState[] driftCorrection(SwerveModuleState[] moduleStates) {

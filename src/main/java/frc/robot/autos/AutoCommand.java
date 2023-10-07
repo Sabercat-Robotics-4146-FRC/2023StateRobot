@@ -13,6 +13,7 @@ import com.google.gson.reflect.TypeToken;
 
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.utils.CommandUtil;
@@ -52,7 +53,7 @@ public class AutoCommand extends SequentialCommandGroup {
             if(i == trajectoryStates.size()-1 || (state.getPose().getX() == waypoint.anchorPoint.get("x") && 
                state.getPose().getY() == waypoint.anchorPoint.get("y"))) {
 
-                if(waypoint.isStopPoint) {
+                if(waypoint.isStopPoint || i == trajectoryStates.size()-1) {
                     if(i != lastIndex) addCommands(new FollowTrajectoryCommand(container, new Trajectory(trajectoryStates.subList(lastIndex, i))));
 
                     lastIndex = i;

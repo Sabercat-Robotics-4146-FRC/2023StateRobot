@@ -42,7 +42,7 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "frc.robots.commands.other.WaitCommand2"
+          "frc.robot.commands.other.WaitCommand2"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
@@ -65,9 +65,7 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [
-          "test"
-        ],
+        "names": [],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
