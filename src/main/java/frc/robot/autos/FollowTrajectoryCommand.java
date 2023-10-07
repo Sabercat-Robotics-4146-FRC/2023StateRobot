@@ -52,6 +52,11 @@ public class FollowTrajectoryCommand extends CommandBase {
     } 
 
     @Override
+    public void end(boolean interrupted) {
+        drivetrain.zeroDrive();
+    }
+
+    @Override
     public boolean isFinished() {
         return timer.hasElapsed(trajectory.trajectory.get(trajectory.trajectory.size()-1).time);
     }
