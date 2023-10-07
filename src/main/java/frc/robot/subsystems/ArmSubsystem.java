@@ -70,6 +70,8 @@ public class ArmSubsystem extends SubsystemBase {
         tab.addNumber("Extension limit", () -> extLimit);
         tab.addNumber("Retraction Limit", () -> retLimit);
         tab.addNumber("Arm Rotation Position", () -> rotationMotorLeft.getSelectedSensorPosition());
+        tab.addBoolean("Extension Limit Switch", () -> extLimitSwitch.get());
+        tab.addBoolean("Retraction Limit Switch", () -> retLimitSwitch.get());
     }
 
     /**
