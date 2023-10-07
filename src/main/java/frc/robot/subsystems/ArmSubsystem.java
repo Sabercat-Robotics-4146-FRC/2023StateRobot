@@ -18,8 +18,8 @@ public class ArmSubsystem extends SubsystemBase {
     public AnalogPotentiometer potentiometer;
     public DigitalInput extLimitSwitch, retLimitSwitch;
 
-    public double extLimit = -115000;
-    public double retLimit = -7500;
+    public double extLimit = Integer.MIN_VALUE;
+    public double retLimit = Integer.MAX_VALUE;
 
     private Timer timer;
 
