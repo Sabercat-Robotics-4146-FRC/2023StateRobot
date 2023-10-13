@@ -34,7 +34,7 @@ public class ClawCommand extends CommandBase{
 
     @Override
     public void execute() {
-        if(HID.getAButtonPressed()) {
+        if(HID.getBButtonPressed()) {
             if(state == 0) {
                 timer.restart();
                 state = 1;

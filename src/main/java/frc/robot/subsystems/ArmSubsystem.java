@@ -23,8 +23,6 @@ public class ArmSubsystem extends SubsystemBase {
 
     private Timer timer;
 
-    private double ZERO;
-
     private double setpoint;
 
     public ArmSubsystem() {
@@ -40,6 +38,8 @@ public class ArmSubsystem extends SubsystemBase {
             motor.config_kF(0, .05, 30);
         }
 
+        potentiometer = new AnalogPotentiometer(ArmConstants.ROTATION_POT_CHANNEL);
+
         extensionMotor = new TalonFX(ArmConstants.EXTENSION_ID);
         extensionMotor.setNeutralMode(NeutralMode.Brake);
 
@@ -49,7 +49,7 @@ public class ArmSubsystem extends SubsystemBase {
         extensionMotor.config_kD(0, 0, 30);
 
         extensionMotor.config_kF(1, 0, 30);
-        extensionMotor.config_kP(1, .125, 30);
+        extensionMotor.config_kP(1, .090, 30);
         extensionMotor.config_kI(1, 0, 30);
         extensionMotor.config_kD(1, 0, 30);
 
@@ -60,8 +60,6 @@ public class ArmSubsystem extends SubsystemBase {
         extLimitSwitch = new DigitalInput(ArmConstants.EXTENSION_LIMIT_CHANNEL);
         retLimitSwitch = new DigitalInput(ArmConstants.RETRACTION_LIMIT_CHANNEL);
 
-        ZERO = rotationMotorLeft.getSelectedSensorPosition(0);
-
         timer = new Timer();
 
         ShuffleboardTab tab = Shuffleboard.getTab("Claw");
@@ -69,6 +67,9 @@ public class ArmSubsystem extends SubsystemBase {
         tab.addNumber("Position", () -> extensionMotor.getSelectedSensorPosition(0));
         tab.addNumber("Extension limit", () -> extLimit);
         tab.addNumber("Retraction Limit", () -> retLimit);
+        tab.addNumber("Arm Rotation Position", () -> rotationMotorLeft.getSelectedSensorPosition());
+        tab.addBoolean("Extension Limit Switch", () -> extLimitSwitch.get());
+        tab.addBoolean("Retraction Limit Switch", () -> retLimitSwitch.get());
     }
 
     /**
@@ -112,16 +113,22 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Position", pos);
     }
 
-    public void setRotationPosition(double pos) {
-        rotationMotorLeft.set(ControlMode.Position, pos + ZERO);
-        rotationMotorRight.set(ControlMode.Position, pos + ZERO);
-    }
+    public void setExtensionPosition() {
+        if(extLimitSwitch.get()) extLimit = extensionMotor.getSelectedSensorPosition();
+        if(retLimitSwitch.get()) retLimit = extensionMotor.getSelectedSensorPosition();
 
-    public void setExtensionPosition(double pos) {
+        if(setpoint < extLimit) {
+            setSetpointAbsolute(extLimit);
+        } else if(setpoint > retLimit) {
+            setSetpointAbsolute(retLimit);
+        }
+
         extensionMotor.selectProfileSlot(1, 0);
-        extensionMotor.set(ControlMode.Position, retLimit-pos);
-        SmartDashboard.putNumber("test", extensionMotor.getClosedLoopError());
-        
+        extensionMotor.set(ControlMode.Position, setpoint);        
+    }
+    
+    public double getRotation() {
+        return potentiometer.get();
     }
 
     public double getSetpoint() {
@@ -130,6 +137,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void setSetpoint(double s) {
         this.setpoint = retLimit - s;
+    }
+
+    public void setSetpointAbsolute(double s) {
+        this.setpoint = s;
     }
 
     @Override
