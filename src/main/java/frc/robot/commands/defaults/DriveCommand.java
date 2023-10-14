@@ -28,8 +28,8 @@ public class DriveCommand extends CommandBase {
     @Override
     public void execute() {
         drivetrain.driveRelative(
-            new Translation2d(forward.get(true), strafe.get(true)), 
-            rotation.get(true));
+            new Translation2d(-forward.get(true), -strafe.get(true)), 
+            -rotation.get(true));
             
     }
 }
