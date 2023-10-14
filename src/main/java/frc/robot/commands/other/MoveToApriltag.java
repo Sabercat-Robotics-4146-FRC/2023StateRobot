@@ -4,6 +4,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
@@ -14,12 +15,19 @@ public class MoveToApriltag extends CommandBase {
     private VisionSubsystem visionSubsystem;
     private DrivetrainSubsystem drivetrainSubsystem;
 
-    PIDController lateral;
-    PIDController longitudinal;
-    PIDController rotational;
+    private PIDController lateral;
+    private PIDController longitudinal;
+    private PIDController rotational;
 
-    SlewRateLimiter slrLateral;
-    SlewRateLimiter slrLongitudinal;
+    private boolean longitudinalFinished;
+    private boolean lateralFinished;
+    private boolean rotationalFinished;
+
+    private boolean noTarget;
+    private Timer timer;
+
+    private SlewRateLimiter slrLateral;
+    private SlewRateLimiter slrLongitudinal;
     
     public MoveToApriltag(RobotContainer container) {
         this.visionSubsystem = container.getVisionSubsystem();
@@ -30,42 +38,66 @@ public class MoveToApriltag extends CommandBase {
 
     @Override
     public void initialize() {
-        longitudinal = new PIDController(1, 0.1, 0);
-        longitudinal.setSetpoint(6.0);
+        timer = new Timer();
+        timer.stop();
+        
+        longitudinal = new PIDController(0.22, 0, 0.1);
+        longitudinal.setSetpoint(5.8);
+        longitudinal.setTolerance(0.1);
 
-        lateral = new PIDController(0.7, 0, 0);
-        lateral.setSetpoint(0.0);
+        lateral = new PIDController(0.21, 0, 1);
+        lateral.setSetpoint(-0.3);
+        lateral.setTolerance(.1);
 
-        rotational = new PIDController(1, 0, 0);
+        rotational = new PIDController(.1, 0, 0);
         rotational.setSetpoint(0.0);
+        rotational.setTolerance(1);
 
-        slrLateral = new SlewRateLimiter(2.2);
-        slrLongitudinal = new SlewRateLimiter(1.5);
+        slrLateral = new SlewRateLimiter(3.2);
+        slrLongitudinal = new SlewRateLimiter(3.2);
+
+        longitudinalFinished = false;
+        lateralFinished = false;
+        rotationalFinished = false;
+        noTarget = false;
     }
+
 
     @Override
     public void execute() {
-        double[] targetPose = visionSubsystem.getTargetPose();
+        if(visionSubsystem.getAprilTagID() != -1) {
+            timer.reset();
 
-        double longitudinalValue = longitudinal.atSetpoint() ? 0 : longitudinal.calculate(targetPose[2]);
-        double lateralValue = lateral.atSetpoint() ? 0 : lateral.calculate(targetPose[0]);
-        double rotationalValue = rotational.atSetpoint() ? 0 : rotational.calculate(drivetrainSubsystem.gyroscope.getAngle());
+            double[] targetPose = visionSubsystem.getTargetPose();
 
-        if(longitudinal.atSetpoint()) longitudinalValue = 0;
-        if(lateral.atSetpoint()) lateralValue = 0;
+            double longitudinalValue = longitudinal.calculate(targetPose[2]);
+            double lateralValue = lateral.calculate(targetPose[0]);
+            double rotationalValue = rotational.calculate(drivetrainSubsystem.gyroscope.getAngle() - Math.round(drivetrainSubsystem.gyroscope.getAngle()/180)*180);
 
-        longitudinalValue = -Math.copySign(MathUtil.clamp(Math.abs(longitudinalValue), 0.01, 2), longitudinalValue)/10;
-        lateralValue = Math.copySign(MathUtil.clamp(Math.abs(lateralValue), 0.01, 2), lateralValue)/10;
-        rotationalValue = Math.copySign(MathUtil.clamp(Math.abs(rotationalValue), 0.01, 2), rotationalValue)/10;
+            longitudinalValue = -Math.copySign(MathUtil.clamp(Math.abs(longitudinalValue), 0.01, 2), longitudinalValue);
+            lateralValue = Math.copySign(MathUtil.clamp(Math.abs(lateralValue), 0.01, 2), lateralValue);
+            rotationalValue = -Math.copySign(MathUtil.clamp(Math.abs(rotationalValue), 0.01, 2), rotationalValue);
 
-        SmartDashboard.putNumber("dx", lateralValue);
-        SmartDashboard.putNumber("dy", longitudinalValue);
+            if(longitudinal.atSetpoint() || targetPose[2] < longitudinal.getSetpoint()) longitudinalFinished = true;
+            if(lateral.atSetpoint()) lateralFinished = true;
+            if(rotational.atSetpoint()) rotationalFinished = true;
 
-        drivetrainSubsystem.drive(
-            new Translation2d(
-                slrLongitudinal.calculate(longitudinalValue),
-                slrLateral.calculate(lateralValue)), 
-            rotationalValue);
+            if(longitudinalFinished) longitudinalValue = 0;
+            if(lateralFinished) lateralValue = 0;
+            if(rotationalFinished) rotationalValue = 0;
+
+            SmartDashboard.putNumber("dx", lateralValue);
+            SmartDashboard.putNumber("dy", longitudinalValue);
+
+            drivetrainSubsystem.drive(
+                new Translation2d(
+                    slrLongitudinal.calculate(longitudinalValue),
+                    lateralFinished ? 0 : slrLateral.calculate(lateralValue)), 
+                rotationalValue);
+        } else {
+            if(timer.get() == 0) timer.restart();
+            else if(timer.get() > 0.5) noTarget = true;
+        }
     }
 
     @Override
@@ -75,6 +107,6 @@ public class MoveToApriltag extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return visionSubsystem.getAprilTagID() == -1 || (longitudinal.atSetpoint() && lateral.atSetpoint() && rotational.atSetpoint());
+        return noTarget || (longitudinalFinished && lateralFinished && rotationalFinished);
     }
 }

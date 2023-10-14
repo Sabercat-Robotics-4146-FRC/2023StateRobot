@@ -2,7 +2,9 @@ package frc.robot.commands.other;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -12,23 +14,30 @@ public class AlignLeft extends CommandBase {
 
     PIDController pid;
 
+    SlewRateLimiter slr;
+
     public AlignLeft(RobotContainer robotContainer) {
         this.drivetrainSubsystem = robotContainer.getDrivetrainSubsystem();
     }
 
     @Override
     public void initialize() {
-        pid = new PIDController(1,0,0);
-        pid.setSetpoint(drivetrainSubsystem.getPose().getX() - 1);
+        pid = new PIDController(2, 0, 0);
+        pid.setSetpoint(drivetrainSubsystem.getPose().getY() - 0.65);
+        pid.setTolerance(.1);
+
+        slr = new SlewRateLimiter(3.2);
     }
     
     @Override 
     public void execute() { 
-        double velocity = pid.calculate(drivetrainSubsystem.getPose().getX());
+        double velocity = pid.calculate(drivetrainSubsystem.getPose().getY());
 
-        velocity = MathUtil.clamp(velocity, 0.51, 2);
+        velocity = Math.copySign(MathUtil.clamp(Math.abs(velocity), 0.01, 2), velocity);
 
-        drivetrainSubsystem.drive(new Translation2d(velocity, 0), 0, true);
+        SmartDashboard.putNumber("TEST BLAH", velocity);
+
+        drivetrainSubsystem.drive(new Translation2d(0, slr.calculate(velocity)), 0, true);
     }
 
     @Override

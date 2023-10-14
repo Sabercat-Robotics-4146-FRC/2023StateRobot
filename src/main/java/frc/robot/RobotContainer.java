@@ -6,7 +6,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.defaults.*;
 import frc.robot.commands.other.AlignLeft;
+import frc.robot.commands.other.AlignRight;
+import frc.robot.commands.other.AlignZero;
 import frc.robot.commands.other.MoveToApriltag;
+import frc.robot.commands.other.SetArmPositionCommand;
 import frc.robot.shuffleboard.DriverReadout;
 import frc.robot.subsystems.*;
 import frc.robot.utils.Axis;
@@ -18,15 +21,15 @@ public class RobotContainer {
     public final CommandXboxController secondaryController = new CommandXboxController(1);
 
     private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
-    //private final ArmSubsystem armSubsystem = new ArmSubsystem();
-    //private final ClawSubsystem clawSubsystem = new ClawSubsystem();
+    private final ArmSubsystem armSubsystem = new ArmSubsystem();
+    private final ClawSubsystem clawSubsystem = new ClawSubsystem();
     private final VisionSubsystem visionSubsystem = new VisionSubsystem();
     private final DriverReadout driverReadout = new DriverReadout();
 
     public RobotContainer() {
         CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
-        //CommandScheduler.getInstance().registerSubsystem(armSubsystem);
-        //CommandScheduler.getInstance().registerSubsystem(clawSubsystem);
+        CommandScheduler.getInstance().registerSubsystem(armSubsystem);
+        CommandScheduler.getInstance().registerSubsystem(clawSubsystem);
         CommandScheduler.getInstance().registerSubsystem(visionSubsystem);
 
 
@@ -39,23 +42,21 @@ public class RobotContainer {
             )
         );
 
-        
+        armSubsystem.setDefaultCommand(
+            new ArmCommand(
+                this,
+                new Axis(() -> secondaryController.getRightTriggerAxis()),
+                new Axis(() -> secondaryController.getLeftTriggerAxis()),
+                new Axis(() -> secondaryController.getRightY())
+            )
+        );
 
-        // armSubsystem.setDefaultCommand(
-        //     new ArmCommand(
-        //         this,
-        //         new Axis(() -> secondaryController.getRightTriggerAxis()),
-        //         new Axis(() -> secondaryController.getLeftTriggerAxis()),
-        //         new Axis(() -> secondaryController.getRightY())
-        //     )
-        // );
-
-        // clawSubsystem.setDefaultCommand(
-        //     new ClawCommand(
-        //         clawSubsystem,
-        //         secondaryController.getHID()
-        //     )
-        // );
+        clawSubsystem.setDefaultCommand(
+            new ClawCommand(
+                clawSubsystem,
+                secondaryController.getHID()
+            )
+        );
  
         configureButtonBindings();
     }
@@ -63,10 +64,17 @@ public class RobotContainer {
     private void configureButtonBindings() {
         primaryController.a().onTrue(Commands.runOnce(drivetrainSubsystem::toggleFieldOriented));
         primaryController.start().onTrue(Commands.runOnce(drivetrainSubsystem.gyroscope::reset));
-        //secondaryController.a().onTrue(new SetArmPositionCommand(this));
-        secondaryController.povUp().onTrue(new MoveToApriltag(this));
-        secondaryController.povLeft().onTrue(new MoveToApriltag(this).andThen(new AlignLeft(this)));
-        secondaryController.povRight().onTrue(new MoveToApriltag(this).andThen(new AlignLeft(this)));
+        secondaryController.a().onTrue(new SetArmPositionCommand(this));
+        secondaryController.povUp().onTrue(
+            new AlignZero(this)
+                .andThen(new MoveToApriltag(this)));
+        secondaryController.povLeft().onTrue(
+            new AlignZero(this)
+                .andThen(new MoveToApriltag(this))
+                .andThen(new AlignLeft(this)));
+        secondaryController.povRight().onTrue(
+            new AlignZero(this)
+                .andThen(new AlignRight(this)));
 
     }
  
@@ -79,8 +87,7 @@ public class RobotContainer {
     }
 
     public ArmSubsystem getArmSubsystem() {
-        // return this.armSubsystem;
-        return null;
+        return this.armSubsystem;
     }
 
     public VisionSubsystem getVisionSubsystem() {
