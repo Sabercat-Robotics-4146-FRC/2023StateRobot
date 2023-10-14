@@ -36,7 +36,7 @@ public class MoveToApriltag extends CommandBase {
         lateral = new PIDController(0.7, 0, 0);
         lateral.setSetpoint(0.0);
 
-        rotational = new PIDController(1, 0, 0, 0);
+        rotational = new PIDController(1, 0, 0);
         rotational.setSetpoint(0.0);
 
         slrLateral = new SlewRateLimiter(2.2);
