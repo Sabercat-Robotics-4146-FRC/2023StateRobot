@@ -63,12 +63,10 @@ public final class Constants {
 
 
         public static final double maxSpeed = 5; 
-        public static final double maxAngularVelocity = 4.0; 
-
+        public static final double maxAngularVelocity = 4.0;
 
         public static final NeutralMode angleNeutralMode = NeutralMode.Brake;
         public static final NeutralMode driveNeutralMode = NeutralMode.Brake;
-
 
         public static final class FrontLeft {
             public static final boolean isInverted = false;
@@ -78,7 +76,7 @@ public final class Constants {
             // 144.676208496 2023 COMP BOT
             // 282.85675048828125 - 2.2796630859375 DRIVE BOT
             public static final Rotation2d angleOffset = 
-                Rotation2d.fromDegrees(239.14764404296876 - 180 + 2.8);
+                Rotation2d.fromDegrees(59.14764404296876 + 2.8);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset, isInverted);
         }
@@ -185,5 +183,17 @@ public final class Constants {
         public static final double CURRENT_LIMIT = 20.0;
 
         public static final double MIN_RUNTIME = 0.3;
+      }
+
+    public static class LimelightConstants {
+        public static final double LIMELIGHT_ANGLE = 0;
+        public static final double LIMELIGHT_HEIGHT = 49.25;
+        public static final double LIMELIGHT_X_OFFSET = 7; // to the right is positive
+        public static final double LIMELIGHT_Y_OFFSET = 4; // forward is positive
+    
+        public static final double DESIRED_FIDUCIAL_AREA = 1.29;
+    
+        public static final double D_Z = 1.0; // Alligned forward backward
+        public static final double D_X = 0.0; // Alligned left right
       }
 }
