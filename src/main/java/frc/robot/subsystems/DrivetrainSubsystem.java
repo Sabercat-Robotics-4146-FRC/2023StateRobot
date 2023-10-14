@@ -100,7 +100,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         if(!rotationFlag && drivingFlag) {
             s.omegaRadiansPerSecond = 
-                -driftCorrectionStat.calculate(gyroscope.getAngle(), lastPigeonAngle)
+                driftCorrectionStat.calculate(gyroscope.getAngle(), lastPigeonAngle)
                 * DriveConstants.maxAngularVelocity;
         } 
         // else if (rotationFlag && drivingFlag) {
