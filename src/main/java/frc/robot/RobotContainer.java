@@ -10,6 +10,7 @@ import frc.robot.commands.other.AlignRight;
 import frc.robot.commands.other.AlignZero;
 import frc.robot.commands.other.MoveToApriltag;
 import frc.robot.commands.other.SetArmPositionCommand;
+import frc.robot.commands.other.SetArmRotationCommand;
 import frc.robot.shuffleboard.DriverReadout;
 import frc.robot.subsystems.*;
 import frc.robot.utils.Axis;
@@ -65,6 +66,7 @@ public class RobotContainer {
         primaryController.a().onTrue(Commands.runOnce(drivetrainSubsystem::toggleFieldOriented));
         primaryController.start().onTrue(Commands.runOnce(drivetrainSubsystem.gyroscope::reset));
         secondaryController.a().onTrue(new SetArmPositionCommand(this));
+        secondaryController.y().onTrue(new SetArmRotationCommand(this));
         secondaryController.povUp().onTrue(
             new AlignZero(this)
                 .andThen(new MoveToApriltag(this)));

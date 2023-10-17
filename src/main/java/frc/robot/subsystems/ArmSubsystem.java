@@ -64,7 +64,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Claw");
 
-        tab.addNumber("Position", () -> extensionMotor.getSelectedSensorPosition(0));
+        tab.addNumber("Position", () -> potentiometer.get());
         tab.addNumber("Extension limit", () -> extLimit);
         tab.addNumber("Retraction Limit", () -> retLimit);
         tab.addNumber("Arm Rotation Position", () -> rotationMotorLeft.getSelectedSensorPosition());
