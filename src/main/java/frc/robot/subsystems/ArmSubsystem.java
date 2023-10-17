@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.commands.other.SetArmPositionCommand;
 
 public class ArmSubsystem extends SubsystemBase {
     public TalonFX rotationMotorLeft, rotationMotorRight, extensionMotor;
@@ -91,10 +92,6 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void setExtensionVelocity(double ms) {
         double pos = extensionMotor.getSelectedSensorPosition(0);
-        // set the limits
-        if(extLimitSwitch.get()) extLimit = pos;
-        if(retLimitSwitch.get()) retLimit = pos;
-
         // convert to units/100ms from meters/second
         // steps per rotation: 2048
         // gear ratio: 15
@@ -102,7 +99,8 @@ public class ArmSubsystem extends SubsystemBase {
 
         double rv = 15 * ((ms / (.040 * Math.PI)) * 2048) / 10;
 
-        if(((pos-extLimit < 1000 || pos < extLimit) && ms < 0) || ((retLimit-pos < 1000 || pos > retLimit) && ms > 0)) {
+        // zero the velocity
+        if(((pos - extLimit < 1000 || pos < extLimit) && ms < 0) || ((retLimit-pos < 1000 || pos > retLimit) && ms > 0)) {
             rv = 0;
         }
 
@@ -114,9 +112,6 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setExtensionPosition() {
-        if(extLimitSwitch.get()) extLimit = extensionMotor.getSelectedSensorPosition();
-        if(retLimitSwitch.get()) retLimit = extensionMotor.getSelectedSensorPosition();
-
         if(setpoint < extLimit) {
             setSetpointAbsolute(extLimit);
         } else if(setpoint > retLimit) {
@@ -145,6 +140,12 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putData(this);
+        if(extLimitSwitch.get()) {
+            extLimit = extensionMotor.getSelectedSensorPosition(0);
+            if(this.getCurrentCommand().getClass() == SetArmPositionCommand.class) {
+                this.getCurrentCommand().cancel();
+            } 
+        }
+        if(retLimitSwitch.get()) retLimit = extensionMotor.getSelectedSensorPosition(0);
     }
 }

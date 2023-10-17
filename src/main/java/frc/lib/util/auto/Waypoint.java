@@ -1,4 +1,4 @@
-package frc.robot.autos;
+package frc.lib.util.auto;
 
 import java.util.Map;
 

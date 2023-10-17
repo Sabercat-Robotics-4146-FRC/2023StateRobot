@@ -13,6 +13,8 @@ import com.google.gson.reflect.TypeToken;
 
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+
+import frc.lib.util.auto.*;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.utils.CommandUtil;
@@ -99,8 +101,8 @@ public class AutoCommand extends SequentialCommandGroup {
                         .excludeFieldsWithoutExposeAnnotation()
                         .create();
 
-        Type type = new TypeToken<frc.robot.autos.Path>() {}.getType();
-        frc.robot.autos.Path path = gson.fromJson(json, type);
+        Type type = new TypeToken<frc.lib.util.auto.Path>() {}.getType();
+        frc.lib.util.auto.Path path = gson.fromJson(json, type);
 
         waypoints = path.waypoints;
         markers = path.markers;
