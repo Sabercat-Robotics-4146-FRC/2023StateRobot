@@ -29,11 +29,11 @@ public class SetArmRotationCommand extends CommandBase {
     public void initialize() {
         position = driverReadout.getSelectedArmPosition();
 
-        pid = new PIDController(1.9, 0.5, 0.1);
+        pid = new PIDController(2.5, 0.5, 0.0);
         pid.setSetpoint(position.ROTATION_POSITION);
         pid.setTolerance(0.01);
 
-        slr = new SlewRateLimiter(.2);
+        slr = new SlewRateLimiter(.3);
     }
 
     @Override

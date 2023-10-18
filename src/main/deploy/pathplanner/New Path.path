@@ -3,12 +3,12 @@
     {
       "anchorPoint": {
         "x": 1.0,
-        "y": 3.45
+        "y": 3.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.469789870834172,
-        "y": 3.488292844764286
+        "x": 1.4715444725007096,
+        "y": 2.9829562238855165
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -24,56 +24,38 @@
     },
     {
       "anchorPoint": {
-        "x": 1.7595340647803912,
-        "y": 3.499655362173942
+        "x": 2.3844725223114525,
+        "y": 3.073560959311855
       },
       "prevControl": {
-        "x": 1.6146619678072816,
-        "y": 3.493974103469114
-      },
-      "nextControl": {
-        "x": 1.9044061617535009,
-        "y": 3.5053366208787704
-      },
-      "holonomicAngle": 0,
-      "isReversal": false,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": true,
-      "stopEvent": {
-        "names": [
-          "frc.robot.commands.other.WaitCommand2"
-        ],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 3.0,
-        "y": 3.45
-      },
-      "prevControl": {
-        "x": 1.9773734331309911,
-        "y": 3.495450069638623
+        "x": 2.3844725223114525,
+        "y": 2.970927756025721
       },
       "nextControl": null,
-      "holonomicAngle": 0.0,
+      "holonomicAngle": -90.79572355273928,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
         "names": [],
-        "executionBehavior": "sequential",
+        "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
       }
     }
   ],
-  "maxVelocity": 4.0,
+  "maxVelocity": null,
   "maxAcceleration": 2.0,
   "isReversed": null,
-  "markers": []
+  "markers": [
+    {
+      "position": 0.5854545454545259,
+      "names": [
+        "event",
+        "omg",
+        "tEST"
+      ]
+    }
+  ]
 }

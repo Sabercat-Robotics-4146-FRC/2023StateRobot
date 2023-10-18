@@ -143,7 +143,7 @@ public class ArmSubsystem extends SubsystemBase {
         if(extLimitSwitch.get()) {
             extLimit = extensionMotor.getSelectedSensorPosition(0);
             if(this.getCurrentCommand() != null && this.getCurrentCommand().getClass() == SetArmPositionCommand.class) {
-                this.getCurrentCommand().cancel();
+                this.getCurrentCommand().end(false);
             } 
         }
         if(retLimitSwitch.get()) retLimit = extensionMotor.getSelectedSensorPosition(0);

@@ -67,14 +67,14 @@ public class RobotContainer {
         primaryController.start().onTrue(Commands.runOnce(drivetrainSubsystem.gyroscope::reset));
         secondaryController.a().onTrue(new SetArmPositionCommand(this));
         secondaryController.y().onTrue(new SetArmRotationCommand(this));
-        secondaryController.povUp().onTrue(
+        primaryController.povUp().onTrue(
             new AlignZero(this)
                 .andThen(new MoveToApriltag(this)));
-        secondaryController.povLeft().onTrue(
+        primaryController.povLeft().onTrue(
             new AlignZero(this)
                 .andThen(new MoveToApriltag(this))
-                .andThen(new AlignLeft(this)));
-        secondaryController.povRight().onTrue(
+                .andThen(new AlignLeft(this)).andThen(new AlignZero(this)));
+        primaryController.povRight().onTrue(
             new AlignZero(this)
                 .andThen(new AlignRight(this)));
 

@@ -49,8 +49,8 @@ public class ClawCommand extends CommandBase{
             if(cur_max > lower_threshold && outputCurrent > lower_threshold) {
                 if(timer.get() == 0) timer.start();
                 cur_max = Math.max(cur_max, outputCurrent);
-            } else {
-                if(timer.hasElapsed(1) && cur_max > lower_threshold && cur_max < upper_threshold && cur_max > ClawConstants.CURRENT_LIMIT) state++;
+            } else if(timer.hasElapsed(1)) {
+                if(cur_max > lower_threshold && cur_max < upper_threshold && cur_max > ClawConstants.CURRENT_LIMIT) state++;
                 cur_max = outputCurrent;
             }
         } else timer.stop();

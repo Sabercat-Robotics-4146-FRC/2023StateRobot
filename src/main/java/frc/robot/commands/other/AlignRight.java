@@ -41,13 +41,13 @@ public class AlignRight extends CommandBase {
         timer = new Timer();
         timer.stop();
         
-        longitudinal = new PIDController(0.22, 0, 0.1);
-        longitudinal.setSetpoint(5.8);
+        longitudinal = new PIDController(0.22, 0.1, 0.1);
+        longitudinal.setSetpoint(5.7);
         longitudinal.setTolerance(0.1);
 
-        lateral = new PIDController(0.21, 0, 1);
-        lateral.setSetpoint(2.57);
-        lateral.setTolerance(.1);
+        lateral = new PIDController(0.22, 0.1, 0.1);
+        lateral.setSetpoint(2.3);
+        lateral.setTolerance(.05);
 
         rotational = new PIDController(.1, 0, 0);
         rotational.setSetpoint(0.0);
@@ -93,7 +93,7 @@ public class AlignRight extends CommandBase {
                 new Translation2d(
                     -slrLongitudinal.calculate(longitudinalValue),
                     -slrLateral.calculate(lateralValue)), 
-                -rotationalValue);
+                rotationalValue);
         } else {
             if(timer.get() == 0) timer.restart();
             else if(timer.get() > 0.5) noTarget = true;

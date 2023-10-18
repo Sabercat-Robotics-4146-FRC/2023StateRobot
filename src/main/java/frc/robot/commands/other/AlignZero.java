@@ -19,9 +19,9 @@ public class AlignZero extends CommandBase {
 
     @Override
     public void initialize() {
-        pid = new PIDController(.05, 0, 0.0005);
+        pid = new PIDController(.055, 0.001, 0.0005);
         pid.setSetpoint(0);
-        pid.setTolerance(1);
+        pid.setTolerance(1.5);
 
     }
 
@@ -30,7 +30,7 @@ public class AlignZero extends CommandBase {
         double velocity = pid.calculate(drivetrainSubsystem.gyroscope.getAngle() - Math.round(drivetrainSubsystem.gyroscope.getAngle()/180)*180);
         velocity = -Math.copySign(MathUtil.clamp(Math.abs(velocity), 0.01, 2), velocity);
 
-        drivetrainSubsystem.drive(new Translation2d(0, 0), -velocity, true);
+        drivetrainSubsystem.drive(new Translation2d(0, 0), velocity, true);
 
     }
 
