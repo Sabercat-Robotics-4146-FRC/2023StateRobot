@@ -91,9 +91,9 @@ public class AlignRight extends CommandBase {
 
             drivetrainSubsystem.drive(
                 new Translation2d(
-                    slrLongitudinal.calculate(longitudinalValue),
-                    lateralFinished ? 0 : slrLateral.calculate(lateralValue)), 
-                rotationalValue);
+                    -slrLongitudinal.calculate(longitudinalValue),
+                    -slrLateral.calculate(lateralValue)), 
+                -rotationalValue);
         } else {
             if(timer.get() == 0) timer.restart();
             else if(timer.get() > 0.5) noTarget = true;

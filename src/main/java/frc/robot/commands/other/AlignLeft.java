@@ -37,7 +37,7 @@ public class AlignLeft extends CommandBase {
 
         SmartDashboard.putNumber("TEST BLAH", velocity);
 
-        drivetrainSubsystem.drive(new Translation2d(0, slr.calculate(velocity)), 0, true);
+        drivetrainSubsystem.drive(new Translation2d(0, -slr.calculate(velocity)), 0, true);
     }
 
     @Override

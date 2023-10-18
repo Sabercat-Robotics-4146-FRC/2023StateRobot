@@ -30,7 +30,7 @@ public class AlignZero extends CommandBase {
         double velocity = pid.calculate(drivetrainSubsystem.gyroscope.getAngle() - Math.round(drivetrainSubsystem.gyroscope.getAngle()/180)*180);
         velocity = -Math.copySign(MathUtil.clamp(Math.abs(velocity), 0.01, 2), velocity);
 
-        drivetrainSubsystem.drive(new Translation2d(0, 0), velocity, true);
+        drivetrainSubsystem.drive(new Translation2d(0, 0), -velocity, true);
 
     }
 
