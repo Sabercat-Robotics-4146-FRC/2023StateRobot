@@ -60,7 +60,7 @@ public final class Constants {
 
 
 
-        public static final double maxSpeed = 5; 
+        public static final double maxSpeed = 3; 
         public static final double maxAngularVelocity = 5.0; 
 
 

@@ -21,6 +21,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -43,11 +44,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public double lastPigeonAngle = 0;
 
+    private Field2d field = new Field2d();
+
     public DrivetrainSubsystem() {
         // init and config gyroscope
         gyroscope = new WPI_Pigeon2(DriveConstants.pigeonID);
         gyroscope.configFactoryDefault();
         gyroscope.reset();
+
+        SmartDashboard.putData("field", field);
 
         // init swerve modules
         swerveModules = new SwerveModule[] {
@@ -176,6 +181,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     @Override
     public void periodic(){
         swerveOdometry.update(gyroscope.getRotation2d(), getModulePositions()); 
+        
+        field.setRobotPose(swerveOdometry.getPoseMeters());
         update(driveSignal);
     }
 
