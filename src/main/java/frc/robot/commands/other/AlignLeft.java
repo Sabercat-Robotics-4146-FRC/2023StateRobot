@@ -47,7 +47,7 @@ public class AlignLeft extends CommandBase {
         if(rotational.atSetpoint()) rotationalFinished = true;
         if(rotationalFinished) rotationalValue = 0;
 
-        drivetrainSubsystem.drive(new Translation2d(0, slr.calculate(velocity)), rotationalValue, true);
+        drivetrainSubsystem.drive(new Translation2d(0, slr.calculate(velocity)), 0, true);
     }
 
     @Override
@@ -57,6 +57,6 @@ public class AlignLeft extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return pid.atSetpoint() && rotational.atSetpoint();
+        return pid.atSetpoint();
     }
 }

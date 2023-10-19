@@ -72,7 +72,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         Shuffleboard.getTab("Drive").addNumber("Pose X", () -> getPose().getX());
         Shuffleboard.getTab("Drive").addNumber("Pose Y", () -> getPose().getY());
-
+        Shuffleboard.getTab("Drive").addNumber("PIGEON", () -> gyroscope.getAngle());
     }
 
     /**

@@ -36,14 +36,14 @@ public class ArmCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if(Math.abs(rotationAxis.get()) >= 0.05) {
+        //if(Math.abs(rotationAxis.get()) >= 0.05) {
             armSubsystem.setRotationVelocity(rotationAxis.get() * ArmConstants.ROTATION_MAX_VELOCITY);
             target = armSubsystem.getRotation();
-        } else {
+        //} else {
             double velocity = pid.calculate(armSubsystem.getRotation(), target);
             SmartDashboard.putNumber("VelOCITY", target);
-            armSubsystem.setRotationVelocity(velocity);
-        }
+            //armSubsystem.setRotationVelocity(velocity);
+       // }
 
         // extension gear diameter: 40mm
         if(extension.get() > 0) {

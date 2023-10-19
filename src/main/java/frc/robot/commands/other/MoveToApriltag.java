@@ -42,10 +42,10 @@ public class MoveToApriltag extends CommandBase {
         timer.stop();
         
         longitudinal = new PIDController(0.25, 0.05, 0.1);
-        longitudinal.setSetpoint(5.5);
+        longitudinal.setSetpoint(5.6);
         longitudinal.setTolerance(0.1);
 
-        lateral = new PIDController(0.30, 0.05, 0.1);
+        lateral = new PIDController(0.30, 0.02, 0.1);
         lateral.setSetpoint(-0.3);
         lateral.setTolerance(.05);
 
