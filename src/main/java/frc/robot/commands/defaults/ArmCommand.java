@@ -40,7 +40,7 @@ public class ArmCommand extends CommandBase {
             armSubsystem.setRotationVelocity(rotationAxis.get() * ArmConstants.ROTATION_MAX_VELOCITY);
             target = armSubsystem.getRotation();
         //} else {
-            double velocity = pid.calculate(armSubsystem.getRotation(), target);
+            //double velocity = pid.calculate(armSubsystem.getRotation(), target);
             SmartDashboard.putNumber("VelOCITY", target);
             //armSubsystem.setRotationVelocity(velocity);
        // }

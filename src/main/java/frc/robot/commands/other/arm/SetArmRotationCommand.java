@@ -1,4 +1,4 @@
-package frc.robot.commands.other;
+package frc.robot.commands.other.arm;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -18,9 +18,19 @@ public class SetArmRotationCommand extends CommandBase {
 
     private SlewRateLimiter slr;
 
+    private double target = Double.NaN;
+
     public SetArmRotationCommand(RobotContainer container) {
         this.armSubsystem = container.getArmSubsystem();
         this.driverReadout = container.getDriverReadout();
+
+        addRequirements(this.armSubsystem);
+    }
+
+    public SetArmRotationCommand(RobotContainer container, double target) {
+        this.armSubsystem = container.getArmSubsystem();
+        this.driverReadout = container.getDriverReadout();
+        this.target = target;
 
         addRequirements(this.armSubsystem);
     }
@@ -30,7 +40,7 @@ public class SetArmRotationCommand extends CommandBase {
         position = driverReadout.getSelectedArmPosition();
 
         pid = new PIDController(2.5, 0.5, 0.0);
-        pid.setSetpoint(position.ROTATION_POSITION);
+        pid.setSetpoint(Double.isNaN(target) ? position.ROTATION_POSITION : target);
         pid.setTolerance(0.01);
 
         slr = new SlewRateLimiter(.3);

@@ -1,4 +1,4 @@
-package frc.robot.commands.other;
+package frc.robot.commands.other.vision;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;

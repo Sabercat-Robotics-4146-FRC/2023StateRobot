@@ -5,12 +5,12 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.defaults.*;
-import frc.robot.commands.other.AlignLeft;
-import frc.robot.commands.other.AlignRight;
-import frc.robot.commands.other.AlignZero;
-import frc.robot.commands.other.MoveToApriltag;
-import frc.robot.commands.other.SetArmPositionCommand;
-import frc.robot.commands.other.SetArmRotationCommand;
+import frc.robot.commands.other.arm.SetArmPositionCommand;
+import frc.robot.commands.other.arm.SetArmRotationCommand;
+import frc.robot.commands.other.vision.AlignLeft;
+import frc.robot.commands.other.vision.AlignRight;
+import frc.robot.commands.other.vision.AlignZero;
+import frc.robot.commands.other.vision.MoveToApriltag;
 import frc.robot.shuffleboard.DriverReadout;
 import frc.robot.subsystems.*;
 import frc.robot.utils.Axis;
@@ -90,6 +90,10 @@ public class RobotContainer {
 
     public ArmSubsystem getArmSubsystem() {
         return this.armSubsystem;
+    }
+
+    public ClawSubsystem getClawSubsystem() {
+        return this.clawSubsystem;
     }
 
     public VisionSubsystem getVisionSubsystem() {

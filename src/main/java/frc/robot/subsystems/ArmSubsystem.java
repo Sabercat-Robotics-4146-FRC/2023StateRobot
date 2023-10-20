@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.commands.other.SetArmPositionCommand;
+import frc.robot.commands.other.arm.SetArmPositionCommand;
 
 public class ArmSubsystem extends SubsystemBase {
     public TalonFX rotationMotorLeft, rotationMotorRight, extensionMotor;

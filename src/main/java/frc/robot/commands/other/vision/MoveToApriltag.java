@@ -1,4 +1,4 @@
-package frc.robot.commands.other;
+package frc.robot.commands.other.vision;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -11,7 +11,7 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
-public class AlignRight extends CommandBase {
+public class MoveToApriltag extends CommandBase {
     private VisionSubsystem visionSubsystem;
     private DrivetrainSubsystem drivetrainSubsystem;
 
@@ -29,7 +29,7 @@ public class AlignRight extends CommandBase {
     private SlewRateLimiter slrLateral;
     private SlewRateLimiter slrLongitudinal;
     
-    public AlignRight(RobotContainer container) {
+    public MoveToApriltag(RobotContainer container) {
         this.visionSubsystem = container.getVisionSubsystem();
         this.drivetrainSubsystem = container.getDrivetrainSubsystem();
 
@@ -41,12 +41,12 @@ public class AlignRight extends CommandBase {
         timer = new Timer();
         timer.stop();
         
-        longitudinal = new PIDController(0.22, 0.1, 0.1);
-        longitudinal.setSetpoint(5.7);
+        longitudinal = new PIDController(0.25, 0.05, 0.1);
+        longitudinal.setSetpoint(5.6);
         longitudinal.setTolerance(0.1);
 
-        lateral = new PIDController(0.22, 0.1, 0.1);
-        lateral.setSetpoint(2.3);
+        lateral = new PIDController(0.30, 0.02, 0.1);
+        lateral.setSetpoint(-0.3);
         lateral.setTolerance(.05);
 
         rotational = new PIDController(.1, 0, 0);

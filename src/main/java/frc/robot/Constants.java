@@ -182,7 +182,10 @@ public final class Constants {
         public static final double LOW_VOLTAGE = 1;
         public static final double CURRENT_LIMIT = 20.0;
 
-        public static final double MIN_RUNTIME = 0.3;
+        public static final double LOWER_THRESHOLD = 10;
+        public static final double UPPER_THRESHOLD = 100;
+
+        public static final double MIN_RUNTIME = 1;
       }
 
     public static class LimelightConstants {

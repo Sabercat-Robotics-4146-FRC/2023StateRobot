@@ -11,7 +11,6 @@ public class ClawCommand extends CommandBase{
     private ClawSubsystem clawSubsystem;
     private XboxController HID;
 
-    private int lower_threshold, upper_threshold;
     private double cur_max;
 
     private Timer timer;
@@ -22,14 +21,16 @@ public class ClawCommand extends CommandBase{
         this.clawSubsystem = clawSubsystem;
         this.HID = HID;
 
+        addRequirements(clawSubsystem);
+    }
+
+    @Override
+    public void initialize() {
         state = 0;
-        lower_threshold = 10;
-        upper_threshold = 100;
-        cur_max = lower_threshold;
+
+        cur_max = ClawConstants.LOWER_THRESHOLD;
 
         timer = new Timer();
-
-        addRequirements(clawSubsystem);
     }
 
     @Override
@@ -46,11 +47,11 @@ public class ClawCommand extends CommandBase{
         // record the max value of a spike, and if it is not within the range of the normal spike, discard it
         double outputCurrent = clawSubsystem.clawMotor.getOutputCurrent();
         if(state == 1) {
-            if(cur_max > lower_threshold && outputCurrent > lower_threshold) {
+            if(cur_max > ClawConstants.LOWER_THRESHOLD && outputCurrent > ClawConstants.LOWER_THRESHOLD) {
                 if(timer.get() == 0) timer.start();
                 cur_max = Math.max(cur_max, outputCurrent);
-            } else if(timer.hasElapsed(1)) {
-                if(cur_max > lower_threshold && cur_max < upper_threshold && cur_max > ClawConstants.CURRENT_LIMIT) state++;
+            } else if(timer.hasElapsed(ClawConstants.MIN_RUNTIME)) {
+                if(cur_max > ClawConstants.LOWER_THRESHOLD && cur_max < ClawConstants.UPPER_THRESHOLD && cur_max > ClawConstants.CURRENT_LIMIT) state++;
                 cur_max = outputCurrent;
             }
         } else timer.stop();

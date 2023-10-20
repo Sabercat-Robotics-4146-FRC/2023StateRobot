@@ -1,4 +1,4 @@
-package frc.robot.commands.other;
+package frc.robot.commands.other.arm;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
@@ -9,17 +9,28 @@ public class SetArmPositionCommand extends InstantCommand {
     private RobotContainer container;
     private ArmSubsystem armSubsystem;
 
+    private double target = Double.NaN;
+
     public SetArmPositionCommand(RobotContainer container) {
         this.container = container;
         this.armSubsystem = container.getArmSubsystem();
 
         addRequirements(armSubsystem);
     }
+
+    public SetArmPositionCommand(RobotContainer container, double target) {
+        this.container = container;
+        this.armSubsystem = container.getArmSubsystem();
+        this.target = target;
+
+        addRequirements(armSubsystem);
+    }
+
     @Override
     public void execute() {
         ArmPositionConstants constants = container.getDriverReadout().getSelectedArmPosition();
 
-        armSubsystem.setSetpoint(constants.EXTENSION_POSITION);
+        armSubsystem.setSetpoint(Double.isNaN(target) ? constants.EXTENSION_POSITION : target);
         container.getArmSubsystem().setExtensionPosition();
     }
 
