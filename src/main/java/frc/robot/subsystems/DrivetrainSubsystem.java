@@ -198,4 +198,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
             module.setCoastMode();
         }
     }
+
+    public void resetGyro180() {
+        gyroscope.reset();
+        gyroscope.addYaw(180);
+    }
 }

@@ -29,21 +29,21 @@ public class ArmCommand extends CommandBase {
     @Override
     public void initialize() {
         pid = new PIDController(2.5, 0.5, 0);
-        pid.setTolerance(0.01);
+        pid.setTolerance(0.02);
 
         target = armSubsystem.getRotation();
     }
 
     @Override
     public void execute() {
-        //if(Math.abs(rotationAxis.get()) >= 0.05) {
+      //  if(Math.abs(rotationAxis.get()) >= 0.05) {
             armSubsystem.setRotationVelocity(rotationAxis.get() * ArmConstants.ROTATION_MAX_VELOCITY);
-            target = armSubsystem.getRotation();
-        //} else {
-            //double velocity = pid.calculate(armSubsystem.getRotation(), target);
-            SmartDashboard.putNumber("VelOCITY", target);
-            //armSubsystem.setRotationVelocity(velocity);
-       // }
+         //   target = armSubsystem.getRotation();
+        // } else {
+        //     double velocity = pid.calculate(armSubsystem.getRotation(), target);
+        //     SmartDashboard.putNumber("VelOCITY", target);
+        //    // armSubsystem.setRotationVelocity(velocity);
+        // }
 
         // extension gear diameter: 40mm
         if(extension.get() > 0) {

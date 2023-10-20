@@ -15,8 +15,6 @@ public class ClawCommand extends CommandBase{
 
     private Timer timer;
 
-    private int state; // 0 == reverse, 1 == high, 2 == low
-
     public ClawCommand(ClawSubsystem clawSubsystem, XboxController HID) {
         this.clawSubsystem = clawSubsystem;
         this.HID = HID;
@@ -26,8 +24,6 @@ public class ClawCommand extends CommandBase{
 
     @Override
     public void initialize() {
-        state = 0;
-
         cur_max = ClawConstants.LOWER_THRESHOLD;
 
         timer = new Timer();
@@ -35,27 +31,31 @@ public class ClawCommand extends CommandBase{
 
     @Override
     public void execute() {
+        int state = clawSubsystem.getState();
         if(HID.getBButtonPressed()) {
             if(state == 0) {
                 timer.restart();
-                state = 1;
-            } else state = 0;
+                clawSubsystem.setState(1);
+            } else clawSubsystem.setState(0);
         }
 
         SmartDashboard.putNumber("State", state);
-        
+        SmartDashboard.putNumber("Cur Max", cur_max);
+
         // record the max value of a spike, and if it is not within the range of the normal spike, discard it
         double outputCurrent = clawSubsystem.clawMotor.getOutputCurrent();
         if(state == 1) {
-            if(cur_max > ClawConstants.LOWER_THRESHOLD && outputCurrent > ClawConstants.LOWER_THRESHOLD) {
+            if(cur_max >= ClawConstants.LOWER_THRESHOLD && outputCurrent > ClawConstants.LOWER_THRESHOLD) {
                 if(timer.get() == 0) timer.start();
                 cur_max = Math.max(cur_max, outputCurrent);
             } else if(timer.hasElapsed(ClawConstants.MIN_RUNTIME)) {
-                if(cur_max > ClawConstants.LOWER_THRESHOLD && cur_max < ClawConstants.UPPER_THRESHOLD && cur_max > ClawConstants.CURRENT_LIMIT) state++;
+                if(cur_max > ClawConstants.LOWER_THRESHOLD && cur_max < ClawConstants.UPPER_THRESHOLD && cur_max > ClawConstants.CURRENT_LIMIT) {
+                    clawSubsystem.setState(2);
+                }
                 cur_max = outputCurrent;
             }
         } else timer.stop();
 
-        clawSubsystem.toggleClaw(Math.min(state,2)); // just in case state somehow gets over 2.
+        clawSubsystem.toggleClaw(Math.min(clawSubsystem.getState(), 2)); // just in case state somehow gets over 2.
     }
 }

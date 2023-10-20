@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.defaults.*;
 import frc.robot.commands.other.arm.SetArmPositionCommand;
 import frc.robot.commands.other.arm.SetArmRotationCommand;
+import frc.robot.commands.other.auto.PickupPiece;
+import frc.robot.commands.other.auto.ScoreNoRotation;
 import frc.robot.commands.other.vision.AlignLeft;
 import frc.robot.commands.other.vision.AlignRight;
 import frc.robot.commands.other.vision.AlignZero;
@@ -65,8 +67,10 @@ public class RobotContainer {
     private void configureButtonBindings() {
         primaryController.a().onTrue(Commands.runOnce(drivetrainSubsystem::toggleFieldOriented));
         primaryController.start().onTrue(Commands.runOnce(drivetrainSubsystem.gyroscope::reset));
+        primaryController.back().onTrue(Commands.runOnce(drivetrainSubsystem::resetGyro180));
         secondaryController.a().onTrue(new SetArmPositionCommand(this));
-        secondaryController.y().onTrue(new SetArmRotationCommand(this));
+        secondaryController.y().onTrue(new PickupPiece(this));
+        secondaryController.x().onTrue(new ScoreNoRotation(this));
         primaryController.povUp().onTrue(
             new AlignZero(this)
                 .andThen(new MoveToApriltag(this)));

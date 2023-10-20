@@ -11,10 +11,14 @@ public class ClawSubsystem extends SubsystemBase {
   public CANSparkMax clawMotor;
   public boolean clawEnabled;
 
+  private int state;
+
   public ClawSubsystem() {
     clawMotor = new CANSparkMax(ClawConstants.CLAW_ID, MotorType.kBrushless);
 
     clawEnabled = false;
+
+    state = 0;
 
     clawMotor.setSmartCurrentLimit(60);
     clawMotor.enableVoltageCompensation(12);
@@ -25,6 +29,14 @@ public class ClawSubsystem extends SubsystemBase {
     double[] map = {-0.75, ClawConstants.HIGH_VOLTAGE, ClawConstants.LOW_VOLTAGE};
     
     clawMotor.setVoltage(map[state]);
+  }
+
+  public int getState() {
+    return state;
+  }
+
+  public void setState(int state){
+    this.state = state;
   }
 
   @Override

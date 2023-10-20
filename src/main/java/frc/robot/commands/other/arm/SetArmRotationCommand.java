@@ -53,6 +53,11 @@ public class SetArmRotationCommand extends CommandBase {
        armSubsystem.setRotationVelocity(velocity);
     }
 
+    @Override
+    public void end(boolean interrupted) { 
+        armSubsystem.setRotationVelocity(0);
+    }
+
     @Override 
     public boolean isFinished() {
         return pid.atSetpoint();
