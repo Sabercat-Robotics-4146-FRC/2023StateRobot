@@ -15,8 +15,7 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.commands.other.arm.SetArmPositionCommand;
 
 public class ArmSubsystem extends SubsystemBase {
-    public TalonFX rotationMotorLeft, rotationMotorRight, extensionMotor;
-    public AnalogPotentiometer potentiometer;
+    public TalonFX extensionMotor;
     public DigitalInput extLimitSwitch, retLimitSwitch;
 
     public double extLimit = Integer.MIN_VALUE;
@@ -27,20 +26,6 @@ public class ArmSubsystem extends SubsystemBase {
     private double setpoint;
 
     public ArmSubsystem() {
-        rotationMotorLeft = new TalonFX(ArmConstants.ROTATION_LEFT_ID);
-        rotationMotorRight = new TalonFX(ArmConstants.ROTATION_RIGHT_ID);
-        rotationMotorRight.setInverted(true);
-
-        for(TalonFX motor : new TalonFX[] {rotationMotorRight, rotationMotorLeft}) {
-            motor.setNeutralMode(NeutralMode.Brake);
-            motor.config_kP(0, .01, 30);
-            motor.config_kI(0, 0, 30);
-            motor.config_kD(0, 0, 30);
-            motor.config_kF(0, .05, 30);
-        }
-
-        potentiometer = new AnalogPotentiometer(ArmConstants.ROTATION_POT_CHANNEL);
-
         extensionMotor = new TalonFX(ArmConstants.EXTENSION_ID);
         extensionMotor.setNeutralMode(NeutralMode.Brake);
 
@@ -65,29 +50,11 @@ public class ArmSubsystem extends SubsystemBase {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Claw");
 
-        tab.addNumber("Position", () -> potentiometer.get());
         tab.addNumber("Position 2", () -> extensionMotor.getSelectedSensorPosition(0));
         tab.addNumber("Extension limit", () -> extLimit);
         tab.addNumber("Retraction Limit", () -> retLimit);
         tab.addBoolean("Extension Limit Switch", () -> extLimitSwitch.get());
         tab.addBoolean("Retraction Limit Switch", () -> retLimitSwitch.get());
-    }
-
-    /**
-     * Sets the velocity of the arm's rotation. For manual or timed control
-     * @param v target velocity in rotations per second
-     */
-    public void setRotationVelocity(double v) {
-        // convert to units/100ms
-        // steps per rotation: 2048
-        // gear ratio: 100 * (58/24)
-
-        double rv = (100 * (58/24)) * (v*2048) / 10;
-        SmartDashboard.putNumber("Target Velocity", rv);
-        SmartDashboard.putNumber("Actual Velocity", rotationMotorRight.getSelectedSensorVelocity(0));
-
-        rotationMotorLeft.set(ControlMode.Velocity, rv);
-        rotationMotorRight.set(ControlMode.Velocity, rv);
     }
 
     public void setExtensionVelocity(double ms) {
@@ -122,10 +89,6 @@ public class ArmSubsystem extends SubsystemBase {
         extensionMotor.set(ControlMode.Position, setpoint);        
     }
     
-    public double getRotation() {
-        return potentiometer.get();
-    }
-
     public double getSetpoint() {
         return setpoint;
     }

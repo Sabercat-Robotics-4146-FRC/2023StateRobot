@@ -36,6 +36,7 @@ public class ClawCommand extends CommandBase{
             if(state == 0) {
                 timer.restart();
                 clawSubsystem.setState(1);
+                state = 1;
             } else clawSubsystem.setState(0);
         }
 
@@ -45,12 +46,13 @@ public class ClawCommand extends CommandBase{
         // record the max value of a spike, and if it is not within the range of the normal spike, discard it
         double outputCurrent = clawSubsystem.clawMotor.getOutputCurrent();
         if(state == 1) {
-            if(cur_max >= ClawConstants.LOWER_THRESHOLD && outputCurrent > ClawConstants.LOWER_THRESHOLD) {
-                if(timer.get() == 0) timer.start();
+            if(outputCurrent > ClawConstants.LOWER_THRESHOLD) {
+                if(cur_max > ClawConstants.CURRENT_LIMIT && timer.get() == 0) timer.start();
                 cur_max = Math.max(cur_max, outputCurrent);
             } else if(timer.hasElapsed(ClawConstants.MIN_RUNTIME)) {
                 if(cur_max > ClawConstants.LOWER_THRESHOLD && cur_max < ClawConstants.UPPER_THRESHOLD && cur_max > ClawConstants.CURRENT_LIMIT) {
                     clawSubsystem.setState(2);
+                    state = 2;
                 }
                 cur_max = outputCurrent;
             }

@@ -16,7 +16,7 @@ public class ArmCommand extends CommandBase {
 
     PIDController pid;
 
-    public ArmCommand(RobotContainer container, Axis extension, Axis retraction, Axis rotationAxis) {
+    public ArmCommand(RobotContainer container, Axis extension, Axis retraction) {
         this.container = container;
         armSubsystem = container.getArmSubsystem();
         this.extension = extension;
@@ -31,13 +31,11 @@ public class ArmCommand extends CommandBase {
         pid = new PIDController(2.5, 0.5, 0);
         pid.setTolerance(0.02);
 
-        target = armSubsystem.getRotation();
     }
 
     @Override
     public void execute() {
       //  if(Math.abs(rotationAxis.get()) >= 0.05) {
-            armSubsystem.setRotationVelocity(rotationAxis.get() * ArmConstants.ROTATION_MAX_VELOCITY);
          //   target = armSubsystem.getRotation();
         // } else {
         //     double velocity = pid.calculate(armSubsystem.getRotation(), target);

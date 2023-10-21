@@ -7,10 +7,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants.ArmPositionConstants;
 import frc.robot.shuffleboard.DriverReadout;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.RotationSubsystem;
 
 public class SetArmRotationCommand extends CommandBase {
-    private ArmSubsystem armSubsystem;
+    private RotationSubsystem rotationSubsystem;
     private DriverReadout driverReadout;
 
     private PIDController pid;
@@ -21,18 +21,18 @@ public class SetArmRotationCommand extends CommandBase {
     private double target = Double.NaN;
 
     public SetArmRotationCommand(RobotContainer container) {
-        this.armSubsystem = container.getArmSubsystem();
+        this.rotationSubsystem = container.getRotationSubsystem();
         this.driverReadout = container.getDriverReadout();
 
-        addRequirements(this.armSubsystem);
+        addRequirements(this.rotationSubsystem);
     }
 
     public SetArmRotationCommand(RobotContainer container, double target) {
-        this.armSubsystem = container.getArmSubsystem();
+        this.rotationSubsystem = container.getRotationSubsystem();
         this.driverReadout = container.getDriverReadout();
         this.target = target;
 
-        addRequirements(this.armSubsystem);
+        addRequirements(this.rotationSubsystem);
     }
 
     @Override
@@ -48,14 +48,14 @@ public class SetArmRotationCommand extends CommandBase {
 
     @Override
     public void execute() {
-       double velocity = slr.calculate(pid.calculate(armSubsystem.getRotation())); // get velocity in terms of rotations/sec
+       double velocity = slr.calculate(pid.calculate(rotationSubsystem.getRotation())); // get velocity in terms of rotations/sec
        SmartDashboard.putNumber("VELOCITY", velocity);
-       armSubsystem.setRotationVelocity(velocity);
+       rotationSubsystem.setRotationVelocity(velocity);
     }
 
     @Override
     public void end(boolean interrupted) { 
-        armSubsystem.setRotationVelocity(0);
+        rotationSubsystem.setRotationVelocity(0);
     }
 
     @Override 

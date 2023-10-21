@@ -28,13 +28,14 @@ public class RobotContainer {
     private final ClawSubsystem clawSubsystem = new ClawSubsystem();
     private final VisionSubsystem visionSubsystem = new VisionSubsystem();
     private final DriverReadout driverReadout = new DriverReadout();
+    private final RotationSubsystem rotationSubsystem = new RotationSubsystem();
 
     public RobotContainer() {
         CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
         CommandScheduler.getInstance().registerSubsystem(armSubsystem);
         CommandScheduler.getInstance().registerSubsystem(clawSubsystem);
         CommandScheduler.getInstance().registerSubsystem(visionSubsystem);
-
+        CommandScheduler.getInstance().registerSubsystem(rotationSubsystem);
 
         drivetrainSubsystem.setDefaultCommand(
             new DriveCommand(
@@ -49,7 +50,13 @@ public class RobotContainer {
             new ArmCommand(
                 this,
                 new Axis(() -> secondaryController.getRightTriggerAxis()),
-                new Axis(() -> secondaryController.getLeftTriggerAxis()),
+                new Axis(() -> secondaryController.getLeftTriggerAxis())
+            )
+        );
+
+        rotationSubsystem.setDefaultCommand(
+            new RotationCommand(
+                this,
                 new Axis(() -> secondaryController.getRightY())
             )
         );
@@ -106,5 +113,9 @@ public class RobotContainer {
 
     public DriverReadout getDriverReadout() {
         return driverReadout;
+    }
+
+    public RotationSubsystem getRotationSubsystem() { 
+        return rotationSubsystem;
     }
 }
