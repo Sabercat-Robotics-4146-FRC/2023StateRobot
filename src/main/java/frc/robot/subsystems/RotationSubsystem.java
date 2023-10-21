@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
@@ -29,6 +30,8 @@ public class RotationSubsystem extends SubsystemBase {
         }
 
         potentiometer = new AnalogPotentiometer(ArmConstants.ROTATION_POT_CHANNEL);
+
+        Shuffleboard.getTab("Arm").addNumber("POS", () -> potentiometer.get());
     }
 
      /**

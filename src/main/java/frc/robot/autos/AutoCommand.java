@@ -7,11 +7,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+import javax.naming.PartialResultException;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import frc.lib.util.auto.*;
@@ -39,7 +42,8 @@ public class AutoCommand extends SequentialCommandGroup {
         readTrajectories();
         readWaypoints();
         
-        drivetrain.getGyro().reset();
+        //drivetrain.getGyro().reset();
+        drivetrain.resetGyro180();
         drivetrain.setBrakeMode();
         drivetrain.resetOdometry(trajectoryStates.get(0).getPose());
 
@@ -54,15 +58,19 @@ public class AutoCommand extends SequentialCommandGroup {
             if(i == trajectoryStates.size()-1 || (state.getPose().getX() == waypoint.anchorPoint.get("x") && 
                state.getPose().getY() == waypoint.anchorPoint.get("y"))) {
 
-                if(waypoint.isStopPoint || i == trajectoryStates.size()-1) {
+                if(waypoint.isStopPoint || i == trajectoryStates.size()-1 || waypoint.stopEvent.names.size() > 0) {
                     if(i != lastIndex) addCommands(new FollowTrajectoryCommand(container, new Trajectory(trajectoryStates.subList(lastIndex, i))));
 
                     lastIndex = i;
                     List<String> names = waypoint.stopEvent.names;
 
+                    ParallelCommandGroup c = new ParallelCommandGroup();
+
                     for(String s: names) {
-                        addCommands(CommandUtil.getInstance().getCommand(container, s));
+                        c.addCommands(CommandUtil.getInstance().getCommand(container, s));
                     }
+
+                    addCommands(c);
                 }
                 waypointIndex++;
             }
@@ -70,7 +78,7 @@ public class AutoCommand extends SequentialCommandGroup {
     }
 
     public void readTrajectories() {
-        Path filepath = Filesystem.getDeployDirectory().toPath().resolve("pathplanner/generatedJSON/New Path.wpilib.json");
+        Path filepath = Filesystem.getDeployDirectory().toPath().resolve("pathplanner/generatedJSON/Rename.wpilib.json");
         String json = "";
         try {
             json = Files.readString(filepath, StandardCharsets.UTF_8);
@@ -89,7 +97,7 @@ public class AutoCommand extends SequentialCommandGroup {
     public void readWaypoints() {
         String json = "";
         try {
-            json = Files.readString(Filesystem.getDeployDirectory().toPath().resolve("pathplanner/New Path.path"), StandardCharsets.UTF_8);
+            json = Files.readString(Filesystem.getDeployDirectory().toPath().resolve("pathplanner/Rename.path"), StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
         }

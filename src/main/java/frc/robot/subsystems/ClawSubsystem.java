@@ -26,6 +26,7 @@ public class ClawSubsystem extends SubsystemBase {
   }
 
   public void toggleClaw(int state) {
+    this.state = state;
     double[] map = {-0.75, ClawConstants.HIGH_VOLTAGE, ClawConstants.LOW_VOLTAGE};
     
     clawMotor.setVoltage(map[state]);

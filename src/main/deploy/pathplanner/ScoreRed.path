@@ -1,0 +1,80 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 14.099227971666435,
+        "y": 1.062395377802803
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 15.099227971666435,
+        "y": 1.062395377802803
+      },
+      "holonomicAngle": 0.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "frc.robot.commands.other.claw.ToggleClawIntake",
+          "frc.robot.commands.other.arm.SetArmRotationCommand",
+          "frc.robot.commands.other.arm.SetArmLimit"
+        ],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 14.610541255100939,
+        "y": 1.0567141190979754
+      },
+      "prevControl": {
+        "x": 14.76953420629764,
+        "y": 1.085577454853684
+      },
+      "nextControl": {
+        "x": 12.764132176031895,
+        "y": 0.7215198555131339
+      },
+      "holonomicAngle": 0.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "frc.robot.commands.other.auto.ScoreNoRotation"
+        ],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 10.13370939569661,
+        "y": 0.8976388753627965
+      },
+      "prevControl": {
+        "x": 10.718879042293876,
+        "y": 0.8237825122000357
+      },
+      "nextControl": null,
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    }
+  ],
+  "markers": []
+}

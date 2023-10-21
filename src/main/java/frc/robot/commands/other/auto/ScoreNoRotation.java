@@ -1,29 +1,20 @@
 package frc.robot.commands.other.auto;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.commands.other.arm.SetArmPositionCommand;
 import frc.robot.commands.other.arm.SetArmRotationCommand;
-import frc.robot.commands.other.arm.SetRetLimit;
-import frc.robot.commands.other.vision.AlignLeft;
-import frc.robot.commands.other.vision.AlignZero;
-import frc.robot.commands.other.vision.MoveToApriltag;
 
 public class ScoreNoRotation extends SequentialCommandGroup {
     public ScoreNoRotation(RobotContainer container) {
         addCommands(
-            new ParallelCommandGroup(
-                new SetRetLimit(container),
-                new SetArmRotationCommand(container, .3)
-            ),
-            // new AlignZero(container),
-            // new MoveToApriltag(container),
-            // new AlignLeft(container),
-            new SetArmRotationCommand(container, .3),
-            new SetArmPositionCommand(container)
-           // new InstantCommand(() -> container.getClawSubsystem().toggleClaw(0)) // released claw
+            new SetArmRotationCommand(container, .32),
+            new SetArmPositionCommand(container),
+            new InstantCommand(() -> container.getClawSubsystem().toggleClaw(0)), // released claw
+            new WaitCommand(1),
+            new SetArmPositionCommand(container, container.getArmSubsystem().retLimit)
         );
     }
 }

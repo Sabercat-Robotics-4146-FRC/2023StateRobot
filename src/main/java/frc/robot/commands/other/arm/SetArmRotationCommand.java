@@ -40,7 +40,7 @@ public class SetArmRotationCommand extends CommandBase {
         position = driverReadout.getSelectedArmPosition();
 
         pid = new PIDController(2.5, 0.5, 0.0);
-        pid.setSetpoint(Double.isNaN(target) ? position.ROTATION_POSITION : target);
+        pid.setSetpoint(Double.isNaN(target) ? 0.32 : target);
         pid.setTolerance(0.01);
 
         slr = new SlewRateLimiter(.3);

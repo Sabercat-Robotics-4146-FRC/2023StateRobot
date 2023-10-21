@@ -88,7 +88,7 @@ public class ArmSubsystem extends SubsystemBase {
         extensionMotor.selectProfileSlot(1, 0);
         extensionMotor.set(ControlMode.Position, setpoint);        
     }
-    
+
     public double getSetpoint() {
         return setpoint;
     }
@@ -100,7 +100,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void setSetpointAbsolute(double s) {
         this.setpoint = s;
     }
-
+    
     @Override
     public void periodic() {
         if(extLimitSwitch.get()) {

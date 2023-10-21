@@ -16,6 +16,8 @@ public class ToggleClawIntake extends CommandBase {
     public ToggleClawIntake(RobotContainer container) { 
         this.clawSubsystem = container.getClawSubsystem();
 
+        clawSubsystem.setState(1);
+
         addRequirements(this.clawSubsystem);
     }
 

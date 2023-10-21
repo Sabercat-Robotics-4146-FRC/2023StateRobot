@@ -36,6 +36,8 @@ public class SetArmPositionCommand extends InstantCommand {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(armSubsystem.extensionMotor.getSelectedSensorPosition() - armSubsystem.getSetpoint()) < 500;
+        return 
+        (armSubsystem.retLimitSwitch.get() && armSubsystem.extensionMotor.getSelectedSensorPosition() > armSubsystem.getSetpoint()) || 
+        Math.abs(armSubsystem.extensionMotor.getSelectedSensorPosition() - armSubsystem.getSetpoint()) < 500;
     }
 }
