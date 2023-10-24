@@ -5,31 +5,24 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.ArmConstants.ArmPositionConstants;
-import frc.robot.shuffleboard.DriverReadout;
 import frc.robot.subsystems.RotationSubsystem;
 
 public class SetArmRotationCommand extends CommandBase {
     private RotationSubsystem rotationSubsystem;
-    private DriverReadout driverReadout;
 
     private PIDController pid;
-    private ArmPositionConstants position;
-
     private SlewRateLimiter slr;
 
     private double target = Double.NaN;
 
     public SetArmRotationCommand(RobotContainer container) {
         this.rotationSubsystem = container.getRotationSubsystem();
-        this.driverReadout = container.getDriverReadout();
 
         addRequirements(this.rotationSubsystem);
     }
 
     public SetArmRotationCommand(RobotContainer container, double target) {
         this.rotationSubsystem = container.getRotationSubsystem();
-        this.driverReadout = container.getDriverReadout();
         this.target = target;
 
         addRequirements(this.rotationSubsystem);
@@ -37,8 +30,6 @@ public class SetArmRotationCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        position = driverReadout.getSelectedArmPosition();
-
         pid = new PIDController(2.5, 0.5, 0.0);
         pid.setSetpoint(Double.isNaN(target) ? 0.32 : target);
         pid.setTolerance(0.01);

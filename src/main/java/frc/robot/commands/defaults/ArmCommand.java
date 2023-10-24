@@ -1,7 +1,6 @@
 package frc.robot.commands.defaults;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
@@ -11,7 +10,7 @@ import frc.robot.utils.Axis;
 public class ArmCommand extends CommandBase {
     RobotContainer container;
     ArmSubsystem armSubsystem;
-    Axis extension, retraction, rotationAxis;
+    Axis extension, retraction;
     double target;
 
     PIDController pid;
@@ -21,7 +20,6 @@ public class ArmCommand extends CommandBase {
         armSubsystem = container.getArmSubsystem();
         this.extension = extension;
         this.retraction = retraction;
-        this.rotationAxis = rotationAxis;
 
         addRequirements(armSubsystem);
     }
