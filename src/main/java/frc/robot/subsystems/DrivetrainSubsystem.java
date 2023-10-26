@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
@@ -21,6 +22,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -42,6 +44,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public PIDController driftCorrectionRot;
 
     public double lastPigeonAngle = 0;
+
+    public ArrayList<Double> swerveData = new ArrayList<Double>();
+    public Field2d field = new Field2d();
 
     public DrivetrainSubsystem() {
         // init and config gyroscope
@@ -174,12 +179,23 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
           SwerveModuleState[] moduleStates = DriveConstants.swerveKinematics.toSwerveModuleStates(speeds);
           updateModules(moduleStates);
+          
+          for(var module : moduleStates){
+            swerveData.add(module.angle.getRadians());
+            swerveData.add(module.speedMetersPerSecond);
+          }
         }
     }
 
     @Override
     public void periodic(){
-        swerveOdometry.update(gyroscope.getRotation2d(), getModulePositions()); 
+        swerveOdometry.update(gyroscope.getRotation2d(), getModulePositions());
+
+        Double[] sendableArray = new Double[8];
+        sendableArray = swerveData.toArray(sendableArray);
+        SmartDashboard.putNumberArray("Swerve Data", sendableArray);
+        field.setRobotPose(swerveOdometry.getPoseMeters());
+
         update(driveSignal);
     }
 
