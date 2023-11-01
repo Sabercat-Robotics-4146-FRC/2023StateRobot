@@ -1,0 +1,60 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 14.52,
+        "y": 7.0
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 13.52,
+        "y": 6.5
+      },
+      "isLocked": false
+    },
+    {
+      "anchor": {
+        "x": 9.00544259588519,
+        "y": 5.624310538551633
+      },
+      "prevControl": {
+        "x": 10.00544259588519,
+        "y": 6.624310538551633
+      },
+      "nextControl": {
+        "x": 8.005442595885192,
+        "y": 4.624310538551633
+      },
+      "isLocked": false
+    },
+    {
+      "anchor": {
+        "x": 9.52,
+        "y": 1.0
+      },
+      "prevControl": {
+        "x": 9.77,
+        "y": 2.5
+      },
+      "nextControl": null,
+      "isLocked": false
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3,
+    "maxAcceleration": 3,
+    "maxAngularVelocity": 540,
+    "maxAngularAcceleration": 720
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0
+  },
+  "reversed": false,
+  "folder": "team",
+  "display": true
+}

@@ -46,48 +46,48 @@ public class RobotContainer {
             )
         );
 
-        armSubsystem.setDefaultCommand(
-            new ArmCommand(
-                this,
-                new Axis(() -> secondaryController.getRightTriggerAxis()),
-                new Axis(() -> secondaryController.getLeftTriggerAxis())
-            )
-        );
+        // armSubsystem.setDefaultCommand(
+        //     new ArmCommand(
+        //         this,
+        //         new Axis(() -> secondaryController.getRightTriggerAxis()),
+        //         new Axis(() -> secondaryController.getLeftTriggerAxis())
+        //     )
+        // );
 
-        rotationSubsystem.setDefaultCommand(
-            new RotationCommand(
-                this,
-                new Axis(() -> secondaryController.getRightY())
-            )
-        );
+        // rotationSubsystem.setDefaultCommand(
+        //     new RotationCommand(
+        //         this,
+        //         new Axis(() -> secondaryController.getRightY())
+        //     )
+        // );
 
-        clawSubsystem.setDefaultCommand(
-            new ClawCommand(
-                clawSubsystem,
-                secondaryController.getHID()
-            )
-        );
+        // clawSubsystem.setDefaultCommand(
+        //     new ClawCommand(
+        //         clawSubsystem,
+        //         secondaryController.getHID()
+        //     )
+        // );
  
         configureButtonBindings();
     }
 
     private void configureButtonBindings() {
-        primaryController.a().onTrue(Commands.runOnce(drivetrainSubsystem::toggleFieldOriented));
-        primaryController.start().onTrue(Commands.runOnce(drivetrainSubsystem.gyroscope::reset));
-        primaryController.back().onTrue(Commands.runOnce(drivetrainSubsystem::resetGyro180));
-        secondaryController.a().onTrue(new SetArmPositionCommand(this));
-        secondaryController.y().onTrue(new PickupPiece(this));
-        secondaryController.x().onTrue(new ScoreNoRotation(this));
-        primaryController.povUp().onTrue(
-            new AlignZero(this)
-                .andThen(new MoveToApriltag(this)));
-        primaryController.povLeft().onTrue(
-            new AlignZero(this)
-                .andThen(new MoveToApriltag(this))
-                .andThen(new AlignLeft(this)).andThen(new AlignZero(this)));
-        primaryController.povRight().onTrue(
-            new AlignZero(this)
-                .andThen(new AlignRight(this)));
+        // primaryController.a().onTrue(Commands.runOnce(drivetrainSubsystem::toggleFieldOriented));
+        // primaryController.start().onTrue(Commands.runOnce(drivetrainSubsystem.gyroscope::reset));
+        // primaryController.back().onTrue(Commands.runOnce(drivetrainSubsystem::resetGyro180));
+        // secondaryController.a().onTrue(new SetArmPositionCommand(this));
+        // secondaryController.y().onTrue(new PickupPiece(this));
+        // secondaryController.x().onTrue(new ScoreNoRotation(this));
+        // primaryController.povUp().onTrue(
+        //     new AlignZero(this)
+        //         .andThen(new MoveToApriltag(this)));
+        // primaryController.povLeft().onTrue(
+        //     new AlignZero(this)
+        //         .andThen(new MoveToApriltag(this))
+        //         .andThen(new AlignLeft(this)).andThen(new AlignZero(this)));
+        // primaryController.povRight().onTrue(
+        //     new AlignZero(this)
+        //         .andThen(new AlignRight(this)));
 
     }
  

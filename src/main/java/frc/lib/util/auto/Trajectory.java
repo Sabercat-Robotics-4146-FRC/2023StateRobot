@@ -109,25 +109,18 @@ public class Trajectory {
         public Pose pose;
         @Expose 
         public double velocity;
-        @Expose
-        public double acceleration;
-        @Expose
-        public double curvature;
         @Expose 
         public double holonomicRotation;
-        @Expose
-        public double angularVelocity;
-        @Expose
+        
+        public double acceleration;
         public double holonomicAngularVelocity;
 
-        public State(double time, Pose pose, double velocity, double acceleration, double curvature, double holonomicRotation, double angularVelocity, double holonomicAngularVelocity) {
+        public State(double time, Pose pose, double velocity, double acceleration, double holonomicRotation, double holonomicAngularVelocity) {
             this.time = time;
             this.pose = pose;
             this.velocity = velocity;
             this.acceleration = acceleration;
-            this.curvature = curvature;
             this.holonomicRotation = holonomicRotation;
-            this.angularVelocity = angularVelocity;
             this.holonomicAngularVelocity = holonomicAngularVelocity;
         }
 
@@ -142,6 +135,8 @@ public class Trajectory {
             if (deltaT < 0) {
               return endValue.interpolate(this, 1 - i);
             }
+
+            acceleration = (endValue.velocity - velocity) / deltaT;
 
             // calculate the holonomic angular acceleration
             double holonomicAngularAcceleration = (endValue.holonomicAngularVelocity - holonomicAngularVelocity)/(endValue.time - time);
@@ -162,10 +157,9 @@ public class Trajectory {
 
             // new angular velocity
             // av_f = av_0 + (aa)(t)
-            final double newAV = angularVelocity + ((endValue.angularVelocity - angularVelocity)/(endValue.time-time))*deltaT;
 
             // new holonomic anglular velocity
-            final double newHAV = holonomicAngularVelocity + holonomicAngularAcceleration *deltaT;
+            final double newHAV = (endValue.holonomicRotation - holonomicRotation) / deltaT + holonomicAngularAcceleration *deltaT;
       
             // Calculate the change in position.
             // delta_s = v_0 t + 0.5at²
@@ -195,9 +189,7 @@ public class Trajectory {
                 toPose(lerp(pose.getPose(), endValue.pose.getPose(), interpolationFrac)),
                 newV,
                 acceleration,
-                lerp(curvature, endValue.curvature, interpolationFrac),
                 lerp(holonomicRotation, endValue.holonomicRotation, interpolationFracAngle),
-                newAV,
                 newHAV);
 
           }

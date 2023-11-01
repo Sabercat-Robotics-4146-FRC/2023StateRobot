@@ -38,31 +38,30 @@ public class CommandUtil {
 
         try {
             Class<?> c = Class.forName(strs[0]);
-            for(Constructor<?> cons : c.getConstructors()) {
-                if(cons.getParameterTypes().length != strs.length-1) continue;
+            // for(Constructor<?> cons : c.getConstructors()) {
+            //     if(cons.getParameterTypes().length != strs.length-1) continue;
 
-                boolean flag = false;
-                Class<?>[] parameters = cons.getParameterTypes();
-                Object[] args = new Object[parameters.length];
-                args[0] = container;
-                for(int i = 1; i < parameters.length; i++) {
-                    Class<?> type = cons.getParameterTypes()[i];
-                    if(type.isPrimitive()) type = wrapper.get(type);
-                    try {
-                        Object o = type.getDeclaredMethod("valueOf", String.class).invoke(null, strs[i]);
-                        args[i] = o;
-
-                    } catch(Exception e) {
-                        System.out.println("Parameters Not Matching");
-                        //e.printStackTrace();
-                        flag = true;
-                        break;
-                    }
-                }
-                if(flag) continue;
-                return (Command) cons.newInstance(args);
-            }  
-            //command = (Command) c.getDeclaredConstructor(RobotContainer.class).newInstance(container);
+            //     boolean flag = false;
+            //     Class<?>[] parameters = cons.getParameterTypes();
+            //     Object[] args = new Object[parameters.length];
+            //     args[0] = container;
+            //     for(int i = 1; i < parameters.length; i++) {
+            //         Class<?> type = cons.getParameterTypes()[i];
+            //         if(type.isPrimitive()) type = wrapper.get(type);
+            //         try {
+            //             Object o = type.getDeclaredMethod("valueOf", String.class).invoke(null, strs[i]);
+            //             args[i] = o;
+            //         } catch(Exception e) {
+            //             System.out.println("Parameters Not Matching");
+            //             //e.printStackTrace();
+            //             flag = true;
+            //             break;
+            //         }
+            //     }
+            //     if(flag) continue;
+            //     return (Command) cons.newInstance(args);
+            // }  
+            return (Command) c.getDeclaredConstructor(RobotContainer.class).newInstance(container);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

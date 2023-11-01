@@ -38,45 +38,46 @@ public class AutoCommand extends SequentialCommandGroup {
         this.container = container;
 
         readTrajectories();
-        readWaypoints();
+        // readWaypoints();
         
-        //drivetrain.getGyro().reset();
+        // drivetrain.getGyro().reset();
         drivetrain.resetGyro180();
         drivetrain.setBrakeMode();
         drivetrain.resetOdometry(trajectoryStates.get(0).getPose());
 
-        int lastIndex = 0;
-        int waypointIndex = 0;
+        // int lastIndex = 0;
+        // int waypointIndex = 0;
+        addCommands(new FollowTrajectoryCommand(container, new Trajectory(trajectoryStates)));
         // int markerIndex = 0;
-        for(int i = 0; i < trajectoryStates.size(); i++) {
-            Trajectory.State state = trajectoryStates.get(i);
-            Waypoint waypoint = waypoints.get(waypointIndex);
-            //Marker marker = markers.get(markerIndex);
+        // for(int i = 0; i < trajectoryStates.size(); i++) {
+            // Trajectory.State state = trajectoryStates.get(i);
+            // Waypoint waypoint = waypoints.get(waypointIndex);
+            // Marker marker = markers.get(markerIndex);
 
-            if(i == trajectoryStates.size()-1 || (state.getPose().getX() == waypoint.anchorPoint.get("x") && 
-               state.getPose().getY() == waypoint.anchorPoint.get("y"))) {
+            // if(i == trajectoryStates.size()-1 || (state.getPose().getX() == waypoint.anchorPoint.get("x") && 
+                // state.getPose().getY() == waypoint.anchorPoint.get("y"))) {
 
-                if(waypoint.isStopPoint || i == trajectoryStates.size()-1 || waypoint.stopEvent.names.size() > 0) {
-                    if(i != lastIndex) addCommands(new FollowTrajectoryCommand(container, new Trajectory(trajectoryStates.subList(lastIndex, i))));
+                // if(waypoint.isStopPoint || i == trajectoryStates.size()-1 || waypoint.stopEvent.names.size() > 0) {
+                    // if(i != lastIndex) addCommands(new FollowTrajectoryCommand(container, new Trajectory(trajectoryStates.subList(lastIndex, i))));
 
-                    lastIndex = i;
-                    List<String> names = waypoint.stopEvent.names;
+                    // lastIndex = i;
+                    // List<String> names = waypoint.stopEvent.names;
 
-                    ParallelCommandGroup c = new ParallelCommandGroup();
+                    // ParallelCommandGroup c = new ParallelCommandGroup();
 
-                    for(String s: names) {
-                        c.addCommands(CommandUtil.getInstance().getCommand(container, s));
-                    }
+                    // for(String s: names) {
+                    //     c.addCommands(CommandUtil.getInstance().getCommand(container, s));
+                    // }
 
-                    addCommands(c);
-                }
-                waypointIndex++;
-            }
-        }
+                    // addCommands(c);
+                // }
+                // waypointIndex++;
+            // }
+        // }
     }
 
     public void readTrajectories() {
-        Path filepath = Filesystem.getDeployDirectory().toPath().resolve("pathplanner/generatedJSON/Rename.wpilib.json");
+        Path filepath = Filesystem.getDeployDirectory().toPath().resolve("pathplanner/generatedJSON/Example Path.wpilib.json");
         String json = "";
         try {
             json = Files.readString(filepath, StandardCharsets.UTF_8);
@@ -95,7 +96,7 @@ public class AutoCommand extends SequentialCommandGroup {
     public void readWaypoints() {
         String json = "";
         try {
-            json = Files.readString(Filesystem.getDeployDirectory().toPath().resolve("pathplanner/Rename.path"), StandardCharsets.UTF_8);
+            json = Files.readString(Filesystem.getDeployDirectory().toPath().resolve("pathplanner/paths/Example Path.json"), StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
         }
