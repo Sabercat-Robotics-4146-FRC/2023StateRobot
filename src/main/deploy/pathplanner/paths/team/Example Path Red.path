@@ -1,0 +1,70 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 13.71868958668473,
+        "y": 6.750610747749274
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 10.081831608246553,
+        "y": 6.892234331343664
+      },
+      "isLocked": false
+    },
+    {
+      "anchor": {
+        "x": 13.71868958668473,
+        "y": 6.583257485959417
+      },
+      "prevControl": {
+        "x": 10.39082451218347,
+        "y": 6.1596739467863255
+      },
+      "nextControl": {
+        "x": 14.759689502017892,
+        "y": 6.715759981867186
+      },
+      "isLocked": false
+    },
+    {
+      "anchor": {
+        "x": 9.48121917598002,
+        "y": 0.9153979870459743
+      },
+      "prevControl": {
+        "x": 9.466374257401293,
+        "y": 3.384525460023142
+      },
+      "nextControl": null,
+      "isLocked": false
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 1.7,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": []
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3,
+    "maxAcceleration": 3,
+    "maxAngularVelocity": 540,
+    "maxAngularAcceleration": 720
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0
+  },
+  "reversed": false,
+  "folder": "team"
+}

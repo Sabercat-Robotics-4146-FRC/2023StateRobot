@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.nio.file.FileSystem;
+import java.nio.file.Path;
 import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -10,6 +12,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Filesystem;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
@@ -125,22 +128,20 @@ public final class Constants {
     }
 
     public static final class AutoConstants { 
-        public static final double maxSpeed = 2;
-        public static final double maxAcceleration = 1;
+        public static final Path PATH_DIR = Filesystem
+                                                .getDeployDirectory()
+                                                .toPath()
+                                                .resolve("pathplanner/paths");
 
-        public static final double maxAngularSpeed = Math.PI/2;
-        public static final double maxAngularAcceleration = Math.PI/4;
-    
-    
-        public static final TrapezoidProfile.Constraints rotationalConstraints =
-            new TrapezoidProfile.Constraints(maxAngularSpeed, maxAngularAcceleration);
+        public static final Path TRAJECTORY_DIR = Filesystem
+                                                    .getDeployDirectory()
+                                                    .toPath()
+                                                    .resolve("pathplanner/paths/team/trajectories");
 
-        public static final TrajectoryConfig trajectoryConfig =
-            new TrajectoryConfig(
-                Constants.AutoConstants.maxSpeed,
-                Constants.AutoConstants.maxAcceleration)
-                .setKinematics(DriveConstants.swerveKinematics);
-    
+        public static final Path AUTO_DIR = Filesystem
+                                                    .getDeployDirectory()
+                                                    .toPath()
+                                                    .resolve("pathplanner/autos/team");
     }
 
     public static class ArmConstants {

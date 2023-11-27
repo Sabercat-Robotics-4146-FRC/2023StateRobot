@@ -1,6 +1,5 @@
 package frc.robot.utils;
 
-import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,7 +60,7 @@ public class CommandUtil {
             //     if(flag) continue;
             //     return (Command) cons.newInstance(args);
             // }  
-            return (Command) c.getDeclaredConstructor(RobotContainer.class).newInstance(container);
+            return (Command) c.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

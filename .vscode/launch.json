@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Trajectory",
+      "request": "launch",
+      "mainClass": "frc.lib.util.auto.Trajectory",
+      "projectName": "2023StateRobot"
+    },
+    {
+      "type": "java",
       "name": "CommandUtil",
       "request": "launch",
       "mainClass": "frc.robot.utils.CommandUtil",

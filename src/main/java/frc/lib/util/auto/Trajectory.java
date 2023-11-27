@@ -2,6 +2,7 @@ package frc.lib.util.auto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
@@ -18,6 +19,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
 public class Trajectory {
+    
     @Expose
     public List<Trajectory.State> trajectory;
 
@@ -29,20 +31,24 @@ public class Trajectory {
         this.trajectory = list;
     }
 
-    public Trajectory(Path path) throws IOException {
+    public Trajectory(String path){
+        this(Path.of(path));
+    }
+
+    public Trajectory(Path path) {
         String json = "";
         try {
             json = Files.readString(path, StandardCharsets.UTF_8);
         } catch (IOException e) {
-            throw new IOException();
+
         }
 
-        Gson gson = new GsonBuilder()
-                        .excludeFieldsWithoutExposeAnnotation()
-                        .create();
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
         Type type = new TypeToken<List<Trajectory.State>>() {}.getType();
         trajectory = gson.fromJson(json, type);
+
+        System.out.println(gson.toJson(trajectory));
     }
 
     private static double lerp(double startValue, double endValue, double t) {
@@ -103,13 +109,13 @@ public class Trajectory {
     }
 
     public class State {
-        @Expose 
+        @Expose
         public double time;
-        @Expose 
+        @Expose
         public Pose pose;
-        @Expose 
+        @Expose
         public double velocity;
-        @Expose 
+        @Expose
         public double holonomicRotation;
         
         public double acceleration;
@@ -204,35 +210,18 @@ public class Trajectory {
     }
 
     public class Pose {
-        @Expose 
-        public Rotation rotation;
         @Expose
-        public Translation translation;
+        public Map<String, Double> rotation;
+        @Expose
+        public Map<String, Double> translation;
 
         public Pose(Pose2d pose) {
-            this.rotation = new Rotation(pose.getRotation().getRadians());
-            this.translation = new Translation(pose.getX(), pose.getY());
+            this.rotation = Map.of("radians", pose.getRotation().getRadians());
+            this.translation = Map.of("x", pose.getX(), "y", pose.getY());
         }
 
         public Pose2d getPose() {
-            return new Pose2d(new Translation2d(translation.x, translation.y), new Rotation2d(rotation.radians));
-        }
-
-        class Rotation {
-            @Expose
-            public double radians;
-            public Rotation(double r) {radians = r;}
-        };
-
-        class Translation {
-            @Expose
-            public double x;
-            @Expose
-            public double y;
-            public Translation(double x, double y) {
-                this.x = x;
-                this.y = y;
-            }
+            return new Pose2d(new Translation2d(translation.get("x"), translation.get("y")), new Rotation2d(rotation.get("radians")));
         }
     }
 }

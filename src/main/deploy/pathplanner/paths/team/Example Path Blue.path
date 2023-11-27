@@ -3,39 +3,39 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 14.52,
-        "y": 7.0
+        "x": 2.8213104133152687,
+        "y": 6.750610747749274
       },
       "prevControl": null,
       "nextControl": {
-        "x": 13.52,
-        "y": 6.5
+        "x": 6.458168391753446,
+        "y": 6.892234331343664
       },
       "isLocked": false
     },
     {
       "anchor": {
-        "x": 9.00544259588519,
-        "y": 5.624310538551633
+        "x": 2.8213104133152687,
+        "y": 6.583257485959417
       },
       "prevControl": {
-        "x": 10.00544259588519,
-        "y": 6.624310538551633
+        "x": 6.14917548781653,
+        "y": 6.1596739467863255
       },
       "nextControl": {
-        "x": 8.005442595885192,
-        "y": 4.624310538551633
+        "x": 1.7803104979821072,
+        "y": 6.715759981867186
       },
       "isLocked": false
     },
     {
       "anchor": {
-        "x": 9.52,
-        "y": 1.0
+        "x": 7.05878082401998,
+        "y": 0.9153979870459743
       },
       "prevControl": {
-        "x": 9.77,
-        "y": 2.5
+        "x": 7.073625742598706,
+        "y": 3.384525460023142
       },
       "nextControl": null,
       "isLocked": false
@@ -43,7 +43,18 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 1.7,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": []
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3,
     "maxAcceleration": 3,
@@ -55,6 +66,5 @@
     "rotation": 0
   },
   "reversed": false,
-  "folder": "team",
-  "display": true
+  "folder": "team"
 }

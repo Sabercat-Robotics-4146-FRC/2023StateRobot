@@ -19,7 +19,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     ctreConfigs = new CTREConfigs();
 
-    m_robotContainer = new RobotContainer();
+    m_robotContainer = RobotContainer.getInstance();
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
   }

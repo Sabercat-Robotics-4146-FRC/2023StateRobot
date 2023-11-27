@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.autos.AutoCommand;
 import frc.robot.commands.defaults.*;
 import frc.robot.commands.other.arm.SetArmPositionCommand;
 import frc.robot.commands.other.arm.SetArmRotationCommand;
@@ -29,6 +30,14 @@ public class RobotContainer {
     private final VisionSubsystem visionSubsystem = new VisionSubsystem();
     private final DriverReadout driverReadout = new DriverReadout();
     private final RotationSubsystem rotationSubsystem = new RotationSubsystem();
+
+    private static RobotContainer instance;
+    public static synchronized RobotContainer getInstance() {
+    if (instance == null) {
+        instance = new RobotContainer();
+    }
+        return instance;
+    }
 
     public RobotContainer() {
         CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
@@ -92,7 +101,7 @@ public class RobotContainer {
     }
  
     public Command getAutonomousCommand() {
-        return CommandUtil.getInstance().getCommand(this, "frc.robot.autos.AutoCommand");
+        return new AutoCommand();
     }
 
     public DrivetrainSubsystem getDrivetrainSubsystem() {

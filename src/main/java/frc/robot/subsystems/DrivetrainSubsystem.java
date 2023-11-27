@@ -172,8 +172,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
                     translation.getY(), 
                     driveSignal.getRotation());
 
+            SmartDashboard.putNumber("x velocity", translation.getX());
+
           SwerveModuleState[] moduleStates = DriveConstants.swerveKinematics.toSwerveModuleStates(speeds);
-          updateModules(moduleStates);
+         // updateModules(moduleStates);
         }
     }
 
