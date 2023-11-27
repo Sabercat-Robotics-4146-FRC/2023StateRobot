@@ -35,8 +35,6 @@ public class AutoObject {
         Type type = new TypeToken<AutoObject>() {}.getType();
         AutoObject auto = gson.fromJson(json, type);
 
-        System.out.println("AUTO JSON" + gson.toJson(auto));
-
         this.command = auto.command;
     }
 

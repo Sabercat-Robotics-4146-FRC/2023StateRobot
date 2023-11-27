@@ -1,7 +1,0 @@
-{
-  "type": "named",
-  "data": {
-    "name": "New C",
-    "path": "frc/robot/commands/other/claw/Test"
-  }
-}

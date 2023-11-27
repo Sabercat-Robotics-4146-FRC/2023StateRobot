@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ClawConstants;
 import frc.robot.subsystems.ClawSubsystem;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 
 public class ToggleClawIntake extends CommandBase {
@@ -13,8 +14,8 @@ public class ToggleClawIntake extends CommandBase {
 
     private Timer timer;
 
-    public ToggleClawIntake(RobotContainer container) { 
-        this.clawSubsystem = container.getClawSubsystem();
+    public ToggleClawIntake() { 
+        this.clawSubsystem = RobotContainer.getInstance().getClawSubsystem();
 
         clawSubsystem.setState(1);
 

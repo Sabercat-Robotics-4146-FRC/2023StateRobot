@@ -1,0 +1,7 @@
+{
+  "type": "named",
+  "data": {
+    "name": "SetArmRotationCommand",
+    "path": "frc/robot/commands/other/arm/SetArmRotationCommand"
+  }
+}

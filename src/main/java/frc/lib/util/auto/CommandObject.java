@@ -31,32 +31,27 @@ public class CommandObject {
         this.data = data;
 
         if(isCommandGroup()) {
-            commands = new ArrayList<>();
-            List<Map<String, Object>> l = (List<Map<String, Object>>) data.get("commands");
-            for(Map<String, Object> o : (List<Map<String, Object>>) l) {
-                CommandObject c = new CommandObject((String) o.get("type"), (Map<String, Object>) o.get("data"));
-                commands.add(c);
-            }
+            evalData();
         }
     }
 
     public Command eval() {
         Command command = new InstantCommand();
 
-        if(commands == null) {
+        if(!isCommandGroup()) {
 
-            // if(type.equals("named")) {
-            //     command = CommandUtil.getInstance().getCommand(null, ((String) data.get("path")).replaceAll("/","."));
-            // } else if(type.equals("wait")) {
-            //     command = new WaitCommand((double) data.get("waitTime"));
-            // } else
-             if(type.equals("path")) {
+            if(type.equals("named")) {
+                command = CommandUtil.getInstance().getCommand(null, ((String) data.get("path")).replaceAll("/","."));
+            } else if(type.equals("wait")) {
+                command = new WaitCommand((double) data.get("waitTime"));
+            } else if(type.equals("path")) {
                 String pathName = (String) data.get("pathName");
                 command = new PathCommand(
                     AutoConstants.PATH_DIR.toString() + "/" + pathName + ".path");
             }
         }
         else {
+            if(commands == null) evalData();
             List<Command> commandList = new ArrayList<>();
 
             for(CommandObject com : commands) commandList.add(com.eval());
@@ -79,6 +74,15 @@ public class CommandObject {
         }
 
         return command;
+    }
+
+    private void evalData() {
+        commands = new ArrayList<>();
+        List<Map<String, Object>> l = (List<Map<String, Object>>) data.get("commands");
+        for(Map<String, Object> o : (List<Map<String, Object>>) l) {
+            CommandObject c = new CommandObject((String) o.get("type"), (Map<String, Object>) o.get("data"));
+            commands.add(c);
+        }
     }
 
     private boolean isCommandGroup() {

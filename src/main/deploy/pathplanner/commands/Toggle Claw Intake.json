@@ -1,0 +1,7 @@
+{
+  "type": "named",
+  "data": {
+    "name": "Toggle Claw Intake",
+    "path": "frc/robot/commands/other/claw/ToggleClawIntake"
+  }
+}

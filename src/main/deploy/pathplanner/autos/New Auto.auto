@@ -10,33 +10,6 @@
           "data": {
             "pathName": "Example Path"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "New C",
-            "path": "frc/robot/commands/other/claw/Test"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Example Path"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "New C",
-                  "path": "frc/robot/commands/other/claw/Test"
-                }
-              }
-            ]
-          }
         }
       ]
     }

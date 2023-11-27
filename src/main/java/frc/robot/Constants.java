@@ -131,7 +131,7 @@ public final class Constants {
         public static final Path PATH_DIR = Filesystem
                                                 .getDeployDirectory()
                                                 .toPath()
-                                                .resolve("pathplanner/paths");
+                                                .resolve("pathplanner/paths/team");
 
         public static final Path TRAJECTORY_DIR = Filesystem
                                                     .getDeployDirectory()

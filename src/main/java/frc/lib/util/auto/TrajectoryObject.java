@@ -49,8 +49,6 @@ public class TrajectoryObject {
 
         Type type = new TypeToken<List<TrajectoryObject.State>>() {}.getType();
         trajectory = gson.fromJson(json, type);
-
-        System.out.println(gson.toJson(trajectory));
     }
 
     private static double lerp(double startValue, double endValue, double t) {
@@ -125,13 +123,14 @@ public class TrajectoryObject {
         public double acceleration;
         public double holonomicAngularVelocity;
 
-        public State(double time, Pose pose, double velocity, double acceleration, double holonomicRotation, double holonomicAngularVelocity) {
+        public State(double time, Pose pose, double velocity, double acceleration, double holonomicRotation, double holonomicAngularVelocity, double test) {
             this.time = time;
             this.pose = pose;
             this.velocity = velocity;
             this.acceleration = acceleration;
             this.holonomicRotation = holonomicRotation;
             this.holonomicAngularVelocity = holonomicAngularVelocity;
+            this.test = test;
         }
 
         State interpolate(State endValue, double i) {
@@ -200,7 +199,8 @@ public class TrajectoryObject {
                 newV,
                 acceleration,
                 lerp(holonomicRotation, endValue.holonomicRotation, interpolationFracAngle),
-                newHAV);
+                newHAV,
+                lerp(test, endValue.test, i));
 
           }
 
@@ -226,6 +226,22 @@ public class TrajectoryObject {
 
         public Pose2d getPose() {
             return new Pose2d(new Translation2d(translation.get("x"), translation.get("y")), new Rotation2d(rotation.get("radians")));
+        }
+
+        public double getX() {
+            return translation.get("x");
+        }
+
+        public double getY() {
+            return translation.get("y");
+        }
+
+        public double getRotation() {
+            return rotation.get("radians");
+        }
+ 
+        public double distanceTo(Pose pose) {
+            return Math.sqrt(Math.pow(pose.getX() - getX(), 2) + Math.pow(pose.getY() - getY(), 2));
         }
     }
 }

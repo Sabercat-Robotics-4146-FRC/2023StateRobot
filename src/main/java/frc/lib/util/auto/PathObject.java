@@ -40,7 +40,6 @@ public class PathObject {
 
         Type type = new TypeToken<PathObject>() {}.getType();
         PathObject pathObject = gson.fromJson(json, type);
-        System.out.println("JSON" + path.toString());
 
         waypoints = pathObject.waypoints;
         eventMarkers = pathObject.eventMarkers;

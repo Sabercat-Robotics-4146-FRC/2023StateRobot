@@ -15,8 +15,8 @@ public class SetArmRotationCommand extends CommandBase {
 
     private double target = Double.NaN;
 
-    public SetArmRotationCommand(RobotContainer container) {
-        this.rotationSubsystem = container.getRotationSubsystem();
+    public SetArmRotationCommand() {
+        this.rotationSubsystem = RobotContainer.getInstance().getRotationSubsystem();
 
         addRequirements(this.rotationSubsystem);
     }

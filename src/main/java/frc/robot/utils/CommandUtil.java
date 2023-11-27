@@ -60,8 +60,10 @@ public class CommandUtil {
             //     if(flag) continue;
             //     return (Command) cons.newInstance(args);
             // }  
+            System.out.println("THIS WORKS: " + str);
             return (Command) c.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
+            System.out.println("bros on something fr");
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

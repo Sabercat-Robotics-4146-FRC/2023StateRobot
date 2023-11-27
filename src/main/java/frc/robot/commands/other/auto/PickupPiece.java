@@ -17,7 +17,7 @@ public class PickupPiece extends SequentialCommandGroup {
         addCommands(
             new SetArmRotationCommand(container, 0.52), // find setpoint
             new ParallelCommandGroup(
-                new ToggleClawIntake(container),
+                new ToggleClawIntake(),
                 new SetArmPositionCommand(container, 35000)), // find setpoint
             new WaitCommand(1),
             new SetArmRotationCommand(container, 0.35)  // move back off the ground, find setpoint

@@ -55,27 +55,27 @@ public class RobotContainer {
             )
         );
 
-        // armSubsystem.setDefaultCommand(
-        //     new ArmCommand(
-        //         this,
-        //         new Axis(() -> secondaryController.getRightTriggerAxis()),
-        //         new Axis(() -> secondaryController.getLeftTriggerAxis())
-        //     )
-        // );
+        armSubsystem.setDefaultCommand(
+            new ArmCommand(
+                this,
+                new Axis(() -> secondaryController.getRightTriggerAxis()),
+                new Axis(() -> secondaryController.getLeftTriggerAxis())
+            )
+        );
 
-        // rotationSubsystem.setDefaultCommand(
-        //     new RotationCommand(
-        //         this,
-        //         new Axis(() -> secondaryController.getRightY())
-        //     )
-        // );
+        rotationSubsystem.setDefaultCommand(
+            new RotationCommand(
+                this,
+                new Axis(() -> secondaryController.getRightY())
+            )
+        );
 
-        // clawSubsystem.setDefaultCommand(
-        //     new ClawCommand(
-        //         clawSubsystem,
-        //         secondaryController.getHID()
-        //     )
-        // );
+        clawSubsystem.setDefaultCommand(
+            new ClawCommand(
+                clawSubsystem,
+                secondaryController.getHID()
+            )
+        );
  
         configureButtonBindings();
     }

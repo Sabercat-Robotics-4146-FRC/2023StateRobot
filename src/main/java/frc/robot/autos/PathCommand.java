@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -47,10 +48,10 @@ public class PathCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        TrajectoryObject trajectory = new TrajectoryObject(AutoConstants.TRAJECTORY_DIR.toString() + ("/" + path.pathName + " Red.json"));
+        TrajectoryObject trajectory = new TrajectoryObject(AutoConstants.TRAJECTORY_DIR.resolve(path.pathName + ".json"));
 
-        System.out.println(AutoConstants.TRAJECTORY_DIR.toString() + ("/" + path.pathName + " Red.json"));
-        System.out.println(AutoConstants.TRAJECTORY_DIR.resolve(path.pathName + " Red.json"));
+        System.out.println(AutoConstants.TRAJECTORY_DIR.toString() + ("/" + path.pathName + ".json"));
+        System.out.println(AutoConstants.TRAJECTORY_DIR.resolve(path.pathName + ".json"));
 
         trajectoryCommand = new FollowTrajectoryCommand(container, trajectory);
         currentCommands = new ArrayList<>();
@@ -59,9 +60,12 @@ public class PathCommand extends CommandBase {
          * get the position of the waypoint along the path by 
          * iterating through the trajectory states
          */
+        waypointPositions = new LinkedList<>();
         int i = 0;
         for(TrajectoryObject.State state : trajectory.trajectory) {
-            if(path.waypoints.get(i).anchor.equals(state.pose.translation)) {
+            if(path.waypoints.get(i).anchor.get("x") == state.pose.getX() && 
+               path.waypoints.get(i).anchor.get("y") == state.pose.getY()) {
+
                 waypointPositions.add(state.test);
                 i++;
             }
@@ -92,7 +96,7 @@ public class PathCommand extends CommandBase {
          * the trajectory in a ratio of the current distance travelled
          * over the total distance to travel
          */
-        double relativePosition = 
+        double relativePosition = path.waypoints.size() - waypointPositions.size() -
             (waypointPositions.peek() - trajectoryCommand.getPosition())/
             (waypointPositions.peek() - lastWaypointPos);
 
@@ -101,6 +105,8 @@ public class PathCommand extends CommandBase {
          * and rounding the current position to the closest 0.05
          */
         Command nextCommand = commandMap.get(Math.round(relativePosition * 20) / 20.0);
+
+        if(nextCommand != null) System.out.println(nextCommand.getClass());
 
         /*
          * loop through all current commands and evaluate

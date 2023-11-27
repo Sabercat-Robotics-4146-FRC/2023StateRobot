@@ -1,7 +1,0 @@
-{
-  "type": "named",
-  "data": {
-    "name": "New Command 1",
-    "path": "src/main/java/frc/robot/commands/"
-  }
-}
