@@ -9,7 +9,7 @@ import java.util.HashMap;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.util.auto.PathObject;
-import frc.lib.util.auto.Trajectory;
+import frc.lib.util.auto.TrajectoryObject;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
 
@@ -41,7 +41,7 @@ public class PathCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        Trajectory trajectory = new Trajectory(AutoConstants.TRAJECTORY_DIR.toString() + ("/" + path.pathName + " Red.json"));
+        TrajectoryObject trajectory = new TrajectoryObject(AutoConstants.TRAJECTORY_DIR.toString() + ("/" + path.pathName + " Red.json"));
 
         System.out.println(AutoConstants.TRAJECTORY_DIR.toString() + ("/" + path.pathName + " Red.json"));
         System.out.println(AutoConstants.TRAJECTORY_DIR.resolve(path.pathName + " Red.json"));

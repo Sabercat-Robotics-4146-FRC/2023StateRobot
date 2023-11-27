@@ -12,15 +12,15 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 
-public class Auto {
+public class AutoObject {
     @Expose
     public Map<String, Object> command;
 
-    public Auto(String path) {
+    public AutoObject(String path) {
         this(Path.of(path));
     }
 
-    public Auto(Path path) {
+    public AutoObject(Path path) {
         String json = "";
         try {
             json = Files.readString(path, StandardCharsets.UTF_8);
@@ -32,8 +32,8 @@ public class Auto {
                         .excludeFieldsWithoutExposeAnnotation()
                         .create();
 
-        Type type = new TypeToken<Auto>() {}.getType();
-        Auto auto = gson.fromJson(json, type);
+        Type type = new TypeToken<AutoObject>() {}.getType();
+        AutoObject auto = gson.fromJson(json, type);
 
         System.out.println("AUTO JSON" + gson.toJson(auto));
 

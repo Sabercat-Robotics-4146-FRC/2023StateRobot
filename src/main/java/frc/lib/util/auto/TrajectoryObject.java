@@ -18,24 +18,24 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
-public class Trajectory {
+public class TrajectoryObject {
     
     @Expose
-    public List<Trajectory.State> trajectory;
+    public List<TrajectoryObject.State> trajectory;
 
-    public Trajectory() {
+    public TrajectoryObject() {
         trajectory = new ArrayList<>();
     }
 
-    public Trajectory(List<Trajectory.State> list) {
+    public TrajectoryObject(List<TrajectoryObject.State> list) {
         this.trajectory = list;
     }
 
-    public Trajectory(String path){
+    public TrajectoryObject(String path){
         this(Path.of(path));
     }
 
-    public Trajectory(Path path) {
+    public TrajectoryObject(Path path) {
         String json = "";
         try {
             json = Files.readString(path, StandardCharsets.UTF_8);
@@ -45,7 +45,7 @@ public class Trajectory {
 
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
-        Type type = new TypeToken<List<Trajectory.State>>() {}.getType();
+        Type type = new TypeToken<List<TrajectoryObject.State>>() {}.getType();
         trajectory = gson.fromJson(json, type);
 
         System.out.println(gson.toJson(trajectory));

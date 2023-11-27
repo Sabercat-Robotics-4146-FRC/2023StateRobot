@@ -4,20 +4,20 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.lib.util.auto.Trajectory;
+import frc.lib.util.auto.TrajectoryObject;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class FollowTrajectoryCommand extends CommandBase {
     Translation2d lastPosition;
-    Trajectory.State lastState;
-    Trajectory trajectory;
+    TrajectoryObject.State lastState;
+    TrajectoryObject trajectory;
 
     DrivetrainSubsystem drivetrain;
 
     Timer timer;
     
-    public FollowTrajectoryCommand(RobotContainer container, Trajectory trajectory) {
+    public FollowTrajectoryCommand(RobotContainer container, TrajectoryObject trajectory) {
         this.trajectory = trajectory;
         this.drivetrain = container.getDrivetrainSubsystem();
 
