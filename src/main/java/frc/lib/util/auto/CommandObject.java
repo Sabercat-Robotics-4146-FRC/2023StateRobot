@@ -52,9 +52,7 @@ public class CommandObject {
             // } else
              if(type.equals("path")) {
                 String pathName = (String) data.get("pathName");
-                System.out.println("AUTO CONSTANT" + AutoConstants.PATH_DIR.toString() + "/" + pathName + ".path");
                 command = new PathCommand(
-                    RobotContainer.getInstance(), 
                     AutoConstants.PATH_DIR.toString() + "/" + pathName + ".path");
             }
         }

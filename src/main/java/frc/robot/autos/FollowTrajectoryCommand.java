@@ -21,7 +21,7 @@ public class FollowTrajectoryCommand extends CommandBase {
         this.trajectory = trajectory;
         this.drivetrain = container.getDrivetrainSubsystem();
 
-        lastPosition = new Translation2d(0,0);
+        lastPosition = new Translation2d(0, 0);
 
         timer = new Timer();
 
@@ -51,16 +51,19 @@ public class FollowTrajectoryCommand extends CommandBase {
 
         SmartDashboard.putNumber("X", timer.get());
 
-        //drivetrain.drive(desiredTranslation, desiredState.holonomicAngularVelocity * Math.PI / 180, true);
+        // drivetrain.drive(desiredTranslation, desiredState.holonomicAngularVelocity * Math.PI / 180, true);
     } 
 
     @Override
     public void end(boolean interrupted) {
-       // drivetrain.zeroDrive();
+        // drivetrain.zeroDrive();
     }
 
+    /*
+     * returns the current position of the robot on the trajectory
+     */
     public double getPosition() {
-        return 0;
+        return trajectory.sample(timer.get()).test;
     }
 
     // @Override

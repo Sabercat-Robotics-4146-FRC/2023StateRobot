@@ -1,8 +1,11 @@
 package frc.lib.util.auto;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
@@ -19,7 +22,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
 public class TrajectoryObject {
-    
     @Expose
     public List<TrajectoryObject.State> trajectory;
 
@@ -117,6 +119,8 @@ public class TrajectoryObject {
         public double velocity;
         @Expose
         public double holonomicRotation;
+        @Expose
+        public double test;
         
         public double acceleration;
         public double holonomicAngularVelocity;
