@@ -39,4 +39,8 @@ public class Auto {
 
         this.command = auto.command;
     }
+
+    public CommandObject getCommand() {
+        return new CommandObject((String) command.get("type"), (Map<String, Object>) command.get("data"));
+    }
 }

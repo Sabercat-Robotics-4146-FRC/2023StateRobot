@@ -11,7 +11,7 @@ public class AutoCommand extends SequentialCommandGroup {
     public AutoCommand() {
         Auto auto = new Auto(Filesystem.getDeployDirectory().toPath().resolve("pathplanner/autos/New Auto.auto"));
 
-        CommandObject c = new CommandObject((String) auto.command.get("type"), (Map<String, Object>) auto.command.get("data"));
+        CommandObject c = auto.getCommand();
 
         // add the evaluated auto command
         addCommands(c.eval());
