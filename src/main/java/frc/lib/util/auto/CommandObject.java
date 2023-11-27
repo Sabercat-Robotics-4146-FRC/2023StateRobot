@@ -30,7 +30,7 @@ public class CommandObject {
         this.type = type;
         this.data = data;
 
-        if(type.contains("sequential")) {
+        if(isCommandGroup()) {
             commands = new ArrayList<>();
             List<Map<String, Object>> l = (List<Map<String, Object>>) data.get("commands");
             for(Map<String, Object> o : (List<Map<String, Object>>) l) {
@@ -81,5 +81,12 @@ public class CommandObject {
         }
 
         return command;
+    }
+
+    private boolean isCommandGroup() {
+        return type.equals("sequential") || 
+                type.equals("parallel") || 
+                type.equals("deadline") || 
+                type.equals("race");
     }
 }
