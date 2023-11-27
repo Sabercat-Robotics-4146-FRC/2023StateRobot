@@ -61,6 +61,24 @@
           ]
         }
       }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 1.3,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "SetArmRotationCommand",
+                "path": "frc/robot/commands/other/arm/SetArmRotationCommand"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {
