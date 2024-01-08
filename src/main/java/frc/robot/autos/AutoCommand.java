@@ -20,6 +20,10 @@ public class AutoCommand extends SequentialCommandGroup {
     }
 
     public String getPath() {
-        return path;
+        return path == null ? "" : path;
+    }
+
+    public String getTeam() {
+        return path == null ? "" : (path.endsWith("Red.auto") ? "Red" : "Blue");
     }
 }

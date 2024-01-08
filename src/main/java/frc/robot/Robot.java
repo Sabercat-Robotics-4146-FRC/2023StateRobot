@@ -29,6 +29,10 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
+    if(!m_autonomousCommand.isScheduled() && !m_autonomousCommand.getTeam().equals(m_autoTab.getSelectedTeam())) {
+      m_autoTab.updatePathOptions();
+    }
+
     /*
      * - check when the autonomous command is to be updated by comparing
      *   the currently loaded autonomous path with the path currently
@@ -37,8 +41,10 @@ public class Robot extends TimedRobot {
      * - check if the command is scheduled and do not update the command
      *   if this is the case. 
      */
+
     if(!m_autonomousCommand.isScheduled() && !m_autonomousCommand.getPath().equals(m_autoTab.getSelectedPath())) {
       m_autonomousCommand = (AutoCommand) m_robotContainer.getAutonomousCommand();
+      System.out.println(m_autonomousCommand.getPath());
     }
   }
 

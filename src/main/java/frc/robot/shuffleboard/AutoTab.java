@@ -9,22 +9,27 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants;
 
 public class AutoTab {
-    public SendableChooser<String> path;
-    public SendableChooser<String> team;
+    private SendableChooser<String> path;
+    private SendableChooser<String> team;
 
     public AutoTab() {
         ShuffleboardTab tab = Shuffleboard.getTab("Auto");
 
         team = new SendableChooser<>();
-        team.setDefaultOption("Blue", updateTeam("Blue"));
-        team.addOption("Red", updateTeam("Red"));
-
         path = new SendableChooser<>();
+
+        team.setDefaultOption("Blue", "Blue");
+        team.addOption("Red", "Red");
+
         path.setDefaultOption("None", null);
         updatePathOptions();
 
-        tab.add("Team", team).withSize(1, 2);
-        tab.add("Auto", path).withSize(1, 2);
+        tab.add("Team", team)
+            .withSize(1, 1);
+
+        tab.add("Auto", path)
+            .withSize(1, 1);
+
     }
 
     public void updatePathOptions() {
@@ -39,12 +44,6 @@ public class AutoTab {
             
             this.path.addOption(name.substring(0, name.lastIndexOf(team)).trim(), file.getPath().toString());
         }
-    }
-
-    public String updateTeam(String team) {
-        updatePathOptions();
-
-        return team;
     }
 
     public String getSelectedPath() {
