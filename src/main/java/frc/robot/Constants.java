@@ -1,6 +1,5 @@
 package frc.robot;
 
-import java.nio.file.FileSystem;
 import java.nio.file.Path;
 import java.util.Map;
 
@@ -9,8 +8,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import frc.lib.util.COTSFalconSwerveConstants;
