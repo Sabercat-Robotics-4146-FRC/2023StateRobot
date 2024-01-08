@@ -14,11 +14,11 @@ import frc.robot.commands.other.vision.AlignLeft;
 import frc.robot.commands.other.vision.AlignRight;
 import frc.robot.commands.other.vision.AlignZero;
 import frc.robot.commands.other.vision.MoveToApriltag;
+import frc.robot.shuffleboard.AutoTab;
 import frc.robot.shuffleboard.DriverReadout;
 import frc.robot.subsystems.*;
 import frc.robot.utils.Axis;
-import frc.robot.utils.CommandUtil;
-
+ 
 
 public class RobotContainer {
     public final CommandXboxController primaryController = new CommandXboxController(0);
@@ -30,6 +30,8 @@ public class RobotContainer {
     private final VisionSubsystem visionSubsystem = new VisionSubsystem();
     private final DriverReadout driverReadout = new DriverReadout();
     private final RotationSubsystem rotationSubsystem = new RotationSubsystem();
+
+    private final AutoTab autoTab = new AutoTab();
 
     private static RobotContainer instance;
     public static synchronized RobotContainer getInstance() {
@@ -101,7 +103,7 @@ public class RobotContainer {
     }
  
     public Command getAutonomousCommand() {
-        return new AutoCommand();
+        return new AutoCommand(autoTab.getSelectedPath());
     }
 
     public DrivetrainSubsystem getDrivetrainSubsystem() {
@@ -126,5 +128,9 @@ public class RobotContainer {
 
     public RotationSubsystem getRotationSubsystem() { 
         return rotationSubsystem;
+    }
+
+    public AutoTab getAutoTab() {
+        return autoTab;
     }
 }

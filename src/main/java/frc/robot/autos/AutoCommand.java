@@ -1,17 +1,29 @@
 package frc.robot.autos;
 
 import frc.lib.util.auto.AutoObject;
-import frc.lib.util.auto.CommandObject;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.*;
 
-public class AutoCommand extends SequentialCommandGroup {    
-    public AutoCommand() {
-        AutoObject auto = new AutoObject(Filesystem.getDeployDirectory().toPath().resolve("pathplanner/autos/team/New Auto Blue.auto"));
+public class AutoCommand extends SequentialCommandGroup {  
+    String path; 
 
-        CommandObject c = auto.getCommand();
+    public AutoCommand(String path) {
+        this.path = path; 
+
+        // basic null check
+        if(path == null) return; 
+
+        // create autonomous object with the path
+        AutoObject auto = new AutoObject(path);
 
         // add the evaluated auto command
-        addCommands(c.eval());
+        addCommands(auto.getCommand().eval());
+    }
+
+    public String getPath() {
+        return path == null ? "" : path;
+    }
+
+    public String getTeam() {
+        return path == null ? "" : (path.endsWith("Red.auto") ? "Red" : "Blue");
     }
 }

@@ -7,9 +7,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
 
-// import edu.wpi.first.wpilibj2.command.Command;
-// import frc.robot.RobotContainer;
-
 public class CommandUtil {
     public Map<Class<?>, Class<?>> wrapper = new HashMap<>();
 
@@ -60,10 +57,8 @@ public class CommandUtil {
             //     if(flag) continue;
             //     return (Command) cons.newInstance(args);
             // }  
-            System.out.println("THIS WORKS: " + str);
             return (Command) c.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
-            System.out.println("bros on something fr");
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
