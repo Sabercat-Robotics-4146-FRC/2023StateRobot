@@ -4,7 +4,6 @@ import frc.robot.Constants.DriveConstants;
 import frc.lib.SwerveModule;
 import frc.lib.util.HolonomicDriveSignal;
 
-
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -23,7 +22,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 
 
 public class DrivetrainSubsystem extends SubsystemBase {
@@ -175,7 +173,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("x velocity", translation.getX());
 
           SwerveModuleState[] moduleStates = DriveConstants.swerveKinematics.toSwerveModuleStates(speeds);
-         // updateModules(moduleStates);
+          updateModules(moduleStates);
         }
     }
 

@@ -7,10 +7,9 @@ import edu.wpi.first.wpilibj2.command.*;
 
 public class AutoCommand extends SequentialCommandGroup {    
     public AutoCommand() {
-        AutoObject auto = new AutoObject(Filesystem.getDeployDirectory().toPath().resolve("pathplanner/autos/team/New Auto Red.auto"));
+        AutoObject auto = new AutoObject(Filesystem.getDeployDirectory().toPath().resolve("pathplanner/autos/team/New Auto Blue.auto"));
 
         CommandObject c = auto.getCommand();
-
 
         // add the evaluated auto command
         addCommands(c.eval());

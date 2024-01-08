@@ -46,17 +46,18 @@ public class FollowTrajectoryCommand extends CommandBase {
             (curPosition.getX() - lastPosition.getX()) / (desiredState.time - lastState.time),
             (curPosition.getY() - lastPosition.getY()) / (desiredState.time - lastState.time));
 
+        System.out.println("TIME: " + desiredState.getPose().getX());
+
         lastPosition = curPosition;
         lastState = desiredState;
 
-        SmartDashboard.putNumber("X", desiredState.test);
-
-        // drivetrain.drive(desiredTranslation, desiredState.holonomicAngularVelocity * Math.PI / 180, true);
+        SmartDashboard.putNumber("X", desiredState.getPose().getX());
+        drivetrain.drive(desiredTranslation, desiredState.holonomicAngularVelocity * Math.PI / 180, true);
     } 
 
     @Override
     public void end(boolean interrupted) {
-        // drivetrain.zeroDrive();
+        drivetrain.zeroDrive();
     }
 
     /*
@@ -66,8 +67,8 @@ public class FollowTrajectoryCommand extends CommandBase {
         return trajectory.sample(timer.get()).test;
     }
 
-    // @Override
-    // public boolean isFinished() {
-    //     return timer.hasElapsed(trajectory.trajectory.get(trajectory.trajectory.size()-1).time);
-    // }
+    @Override
+    public boolean isFinished() {
+        return timer.hasElapsed(trajectory.trajectory.get(trajectory.trajectory.size()-1).time);
+    }
 }
